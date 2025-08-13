@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Mail, Phone, Send, Check } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { getAssetPath } from "../utils/assets";
 
 const ContactSection: React.FC = () => {
   const { t } = useLanguage();
@@ -133,7 +134,7 @@ const ContactSection: React.FC = () => {
                 {/* Map Image */}
                 <div className="mt-6 flex justify-center">
                   <img
-                    src="/MapImage.png"
+                    src={getAssetPath("/MapImage.png")}
                     alt="Location Map"
                     className="w-2/3 h-auto rounded-lg"
                   />
