@@ -36,7 +36,7 @@ const HeroSection: React.FC = () => {
   };
 
   const scrollToConsultation = () => {
-    const element = document.getElementById("consultation");
+    const element = document.getElementById("contact");
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
