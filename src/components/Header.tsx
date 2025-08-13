@@ -136,12 +136,6 @@ const Header: React.FC = () => {
               {t("nav.products")}
             </button>
             <button
-              onClick={() => scrollToSection("consultation")}
-              className="block w-full text-left px-3 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors duration-200"
-            >
-              {t("nav.consultation")}
-            </button>
-            <button
               onClick={() => scrollToSection("contact")}
               className="block w-full text-left px-3 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors duration-200"
             >

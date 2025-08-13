@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-4">
               {t("footer.quickLinks")}
             </h3>
-            <div className="grid grid-cols-2 grid-rows-3 grid-flow-col gap-x-6 gap-y-2">
+            <div className="grid grid-cols-1 gap-y-2">
               <button
                 onClick={() => scrollToSection("home")}
                 className="text-gray-400 hover:text-emerald-400 transition-colors duration-200 text-left"
@@ -50,12 +50,6 @@ const Footer: React.FC = () => {
                 className="text-gray-400 hover:text-emerald-400 transition-colors duration-200 text-left"
               >
                 {t("nav.products")}
-              </button>
-              <button
-                onClick={() => scrollToSection("consultation")}
-                className="text-gray-400 hover:text-emerald-400 transition-colors duration-200 text-left"
-              >
-                {t("nav.consultation")}
               </button>
               <button
                 onClick={() => scrollToSection("contact")}
