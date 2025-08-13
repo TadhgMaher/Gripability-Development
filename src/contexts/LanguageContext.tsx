@@ -116,7 +116,6 @@ const translations: LanguageTranslations = {
 
     // Product Page
     "product.consultation": "Consultation Required",
-    "product.available": "Available Out-of-Box",
     "product.download": "Download full technical sheet [PDF – German]",
     "product.message": "Message Us About This Product",
 

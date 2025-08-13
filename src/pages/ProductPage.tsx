@@ -132,7 +132,7 @@ const ProductPage: React.FC = () => {
         name: t("products.tbrush.name"),
         description: t("products.tbrush.desc"),
         longDescription: t("product.tbrush.longDescription"),
-        requiresConsultation: false,
+        requiresConsultation: true,
         images: [getAssetPath("/TBrush.jpg")],
         features: [
           t("product.tbrush.features.0"),
@@ -247,7 +247,7 @@ const ProductPage: React.FC = () => {
         name: t("products.bhand.name"),
         description: t("products.bhand.desc"),
         longDescription: t("product.bhand.longDescription"),
-        requiresConsultation: false,
+        requiresConsultation: true,
         images: [getAssetPath("/BHand1.jpg"), getAssetPath("/BHand2.jpg")],
         features: [
           t("product.bhand.features.0"),
@@ -330,24 +330,9 @@ const ProductPage: React.FC = () => {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="flex items-center space-x-3 mb-4">
-                  <div
-                    className={`px-4 py-2 rounded-full text-sm font-semibold flex items-center space-x-2 ${
-                      product.requiresConsultation
-                        ? "bg-orange-100 text-orange-600"
-                        : "bg-green-100 text-green-600"
-                    }`}
-                  >
-                    {product.requiresConsultation ? (
-                      <>
-                        <AlertCircle className="w-4 h-4" />
-                        <span>{t("product.consultation")}</span>
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle className="w-4 h-4" />
-                        <span>{t("product.available")}</span>
-                      </>
-                    )}
+                  <div className="px-4 py-2 rounded-full text-sm font-semibold flex items-center space-x-2 bg-orange-100 text-orange-600">
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{t("product.consultation")}</span>
                   </div>
                 </div>
 
