@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { getAssetPath } from "../utils/assets";
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
@@ -31,9 +32,9 @@ const HeroSection: React.FC = () => {
     >
       {/* Background with parallax effect */}
       <div
-        className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-emerald-100"
+        className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `url(/herobg.jpg)`,
+          backgroundImage: `url(${getAssetPath("/herobg.jpg")})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
@@ -57,7 +58,7 @@ const HeroSection: React.FC = () => {
           >
             <div className="w-20 h-20 mx-auto rounded-2xl overflow-hidden shadow-lg">
               <img
-                src="/Logo.jpg"
+                src={getAssetPath("/Logo.jpg")}
                 alt="GripAbility Logo"
                 className="w-full h-full object-cover"
               />

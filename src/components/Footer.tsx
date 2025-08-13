@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
+import { getAssetPath } from "../utils/assets";
 
 const Footer: React.FC = () => {
   const { t } = useLanguage();
@@ -21,21 +22,22 @@ const Footer: React.FC = () => {
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <img
-                src="/Logo.jpg"
+                src={getAssetPath("/Logo.jpg")}
                 alt="Gripability Logo"
                 className="w-10 h-10 rounded-lg object-contain"
               />
               <span className="text-xl font-bold">Gripability</span>
             </div>
             <p className="text-gray-400 leading-relaxed mb-6">
-              Empowering independence through advanced assistive technology.
-              Engineered in Germany. Trusted worldwide for over 20 years.
+              {t("footer.description")}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("footer.quickLinks")}
+            </h3>
             <div className="grid grid-cols-2 grid-rows-3 grid-flow-col gap-x-6 gap-y-2">
               <button
                 onClick={() => scrollToSection("home")}
@@ -71,7 +73,7 @@ const Footer: React.FC = () => {
                 to="/impressum"
                 className="text-gray-400 hover:text-emerald-400 transition-colors duration-200"
               >
-                {t("footer.certification")}
+                {t("footer.impressum")}
               </Link>
             </div>
           </div>
@@ -80,7 +82,7 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2025 GripAbility. All rights reserved.
+            {t("footer.copyright")}
           </p>
           <p className="text-gray-500 text-xs italic">
             "Die Kunst Dinge zu be.greifen" — The Art of Handling Things.

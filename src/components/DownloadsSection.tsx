@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Download, FileText } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { getAssetPath } from "../utils/assets";
 
 const DownloadsSection: React.FC = () => {
   const { t } = useLanguage();
@@ -63,7 +64,7 @@ const DownloadsSection: React.FC = () => {
     }
 
     // Create download link for the PDF
-    const pdfPath = `/pdfs/${pdfFileName}`;
+    const pdfPath = getAssetPath(`/pdfs/${pdfFileName}`);
     const link = document.createElement("a");
     link.href = pdfPath;
     link.download = pdfFileName;
@@ -84,8 +85,7 @@ const DownloadsSection: React.FC = () => {
             {t("downloads.headline")}
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Download detailed technical specifications and user guides for all
-            our products.
+            {t("downloads.description")}
           </p>
         </div>
 

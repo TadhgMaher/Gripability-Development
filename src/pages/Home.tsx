@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
 import ProductsSection from "../components/ProductsSection";
@@ -6,6 +6,11 @@ import ContactSection from "../components/ContactSection";
 import DownloadsSection from "../components/DownloadsSection";
 
 const Home: React.FC = () => {
+  useEffect(() => {
+    // Ensure we're at the top when Home component mounts
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen">
       <HeroSection />

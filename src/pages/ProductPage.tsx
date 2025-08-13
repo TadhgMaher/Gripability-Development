@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Download,
   MessageCircle,
   CheckCircle,
   AlertCircle,
-  Play,
   Settings,
   Zap,
   Users,
@@ -17,8 +16,11 @@ import {
   Hand,
   Wind,
   Gauge,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { getAssetPath } from "../utils/assets";
 
 interface Application {
   title: string;
@@ -55,12 +57,26 @@ interface ProductData {
 const ProductPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     setIsVisible(true);
+    setCurrentImageIndex(0); // Reset carousel when product changes
     window.scrollTo(0, 0);
-  }, []);
+  }, [productId]);
+
+  const handleContactNavigation = () => {
+    navigate("/");
+    // Wait for navigation to complete, then scroll to contact section
+    setTimeout(() => {
+      const contactElement = document.getElementById("contact");
+      if (contactElement) {
+        contactElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
 
   const getProductData = (id: string): Product | null => {
     const products: ProductData = {
@@ -69,7 +85,11 @@ const ProductPage: React.FC = () => {
         description: t("products.xhand.desc"),
         longDescription: t("product.xhand.longDescription"),
         requiresConsultation: true,
-        images: ["/XHand.jpg", "/XHand2.jpg", "/XHand3.jpg"],
+        images: [
+          getAssetPath("/XHand.jpg"),
+          getAssetPath("/XHand2.jpg"),
+          getAssetPath("/XHand3.jpg"),
+        ],
         features: [
           t("product.xhand.features.0"),
           t("product.xhand.features.1"),
@@ -113,7 +133,7 @@ const ProductPage: React.FC = () => {
         description: t("products.tbrush.desc"),
         longDescription: t("product.tbrush.longDescription"),
         requiresConsultation: false,
-        images: ["/TBrush.jpg"],
+        images: [getAssetPath("/TBrush.jpg")],
         features: [
           t("product.tbrush.features.0"),
           t("product.tbrush.features.1"),
@@ -153,10 +173,10 @@ const ProductPage: React.FC = () => {
         longDescription: t("product.e3hand.longDescription"),
         requiresConsultation: true,
         images: [
-          "/E3Photo1.jpg",
-          "/E3Photo2.jpg",
-          "/E3Photo3.jpg",
-          "/E3Photo4.jpg",
+          getAssetPath("/E3Photo1.jpg"),
+          getAssetPath("/E3Photo2.jpg"),
+          getAssetPath("/E3Photo3.jpg"),
+          getAssetPath("/E3Photo4.jpg"),
         ],
         features: [
           t("product.e3hand.features.0"),
@@ -164,9 +184,6 @@ const ProductPage: React.FC = () => {
           t("product.e3hand.features.2"),
           t("product.e3hand.features.3"),
           t("product.e3hand.features.4"),
-          "Mobile backpack module with intelligent control",
-          "200-400 gripping operations per charge",
-          "3 adjustable gripping force levels",
         ],
         color: "from-purple-500 to-purple-600",
         technicalSpecs: {
@@ -179,59 +196,50 @@ const ProductPage: React.FC = () => {
           hilfsmittelNumber: "02.40.04.4001",
         },
         medicalIndications: [
-          "Tetraplegia, Tetraspasticity, Tetraparesis",
-          "Hemiparesis, Muscular Dystrophy",
-          "Post-Polio Syndrome, Dysmelias",
-          "Functional failures of hand muscles due to nerve/muscle diseases",
-          "Any condition requiring upper extremity function compensation",
+          t("e3hand.medicalIndications.tetraplegia"),
+          t("e3hand.medicalIndications.hemiparesis"),
+          t("e3hand.medicalIndications.postpolio"),
+          t("e3hand.medicalIndications.muscle"),
+          t("e3hand.medicalIndications.indication"),
         ],
         applications: [
           {
-            title: "Daily Living Activities",
-            description:
-              "Handle everyday items like cutlery, keys, phones, food items, and documents with ease and independence.",
+            title: t("e3hand.applications.daily.title"),
+            description: t("e3hand.applications.daily.description"),
           },
           {
-            title: "Educational & Learning",
-            description:
-              "Active participation in experiments, projects, and learning activities. Use writing tools and technical devices independently.",
+            title: t("e3hand.applications.education.title"),
+            description: t("e3hand.applications.education.description"),
           },
           {
-            title: "Professional Work",
-            description:
-              "Handle work tools, documents, phones, and various workplace objects to access new career opportunities.",
+            title: t("e3hand.applications.career.title"),
+            description: t("e3hand.applications.career.description"),
           },
           {
-            title: "Recreation & Gaming",
-            description:
-              "Participate in board games, card games, creative activities, cooking, and musical instruments.",
+            title: t("e3hand.applications.leisure.title"),
+            description: t("e3hand.applications.leisure.description"),
           },
           {
-            title: "Therapeutic Applications",
-            description:
-              "Develop motor skills, coordination, self-representation, and self-regulation through active engagement.",
+            title: t("e3hand.applications.creative.title"),
+            description: t("e3hand.applications.creative.description"),
           },
         ],
         modules: [
           {
-            name: "Gripping Module",
-            description:
-              "Consists of gripper and adaptation, used on hand or other body part",
+            name: t("e3hand.components.gripper.title"),
+            description: t("e3hand.components.gripper.description"),
           },
           {
-            name: "Control Module",
-            description:
-              "Positioned for optimal system control with touch-sensitive operation",
+            name: t("e3hand.components.control.title"),
+            description: t("e3hand.components.control.description"),
           },
           {
-            name: "Backpack Module",
-            description:
-              "Mobile intelligent power unit, typically mounted on wheelchair backrest",
+            name: t("e3hand.components.backpack.title"),
+            description: t("e3hand.components.backpack.description"),
           },
           {
-            name: "Compressor Module",
-            description:
-              "Stationary charging station for the pneumatic system (e.g., at home)",
+            name: t("e3hand.components.compressor.title"),
+            description: t("e3hand.components.compressor.description"),
           },
         ],
       },
@@ -240,7 +248,7 @@ const ProductPage: React.FC = () => {
         description: t("products.bhand.desc"),
         longDescription: t("product.bhand.longDescription"),
         requiresConsultation: false,
-        images: ["/BHand1.jpg", "/BHand2.jpg"],
+        images: [getAssetPath("/BHand1.jpg"), getAssetPath("/BHand2.jpg")],
         features: [
           t("product.bhand.features.0"),
           t("product.bhand.features.1"),
@@ -351,21 +359,21 @@ const ProductPage: React.FC = () => {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link
-                    to="/#consultation"
+                  <button
+                    onClick={handleContactNavigation}
                     className={`bg-gradient-to-r ${product.color} text-white px-8 py-4 rounded-lg font-semibold hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2`}
                   >
                     <MessageCircle className="w-5 h-5" />
                     <span>{t("getInContactWithUs")}</span>
-                  </Link>
+                  </button>
                   <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-4 rounded-lg font-semibold transition-colors duration-200 flex items-center space-x-2">
                     <Download className="w-5 h-5" />
                     <a
                       href={
                         productId === "x-hand"
-                          ? "/pdfs/Gripability_x_hand.pdf"
+                          ? getAssetPath("/pdfs/Gripability_x_hand.pdf")
                           : productId === "e3-hand"
-                          ? "/pdfs/Gripability_e_hand.pdf"
+                          ? getAssetPath("/pdfs/Gripability_e_hand.pdf")
                           : "#"
                       }
                       download
@@ -403,20 +411,78 @@ const ProductPage: React.FC = () => {
             <h2 className="text-3xl font-bold text-gray-900 mb-8">
               {t("productGallery")}
             </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {product.images.map((image: string, index: number) => (
-                <div key={index} className="relative group cursor-pointer">
-                  <img
-                    src={image}
-                    alt={`${product.name} ${index + 1}`}
-                    className="w-full h-64 object-cover rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl flex items-center justify-center">
-                    <Play className="w-12 h-12 text-white opacity-0 group-hover:opacity-80 transition-opacity duration-300" />
+            {product.images.length <= 3 ? (
+              // Regular grid for 3 or fewer images
+              <div className="grid md:grid-cols-3 gap-6">
+                {product.images.map((image: string, index: number) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={image}
+                      alt={`${product.name} ${index + 1}`}
+                      className="w-full h-64 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              // Carousel for more than 3 images
+              <div className="relative">
+                <div className="overflow-hidden rounded-xl">
+                  <div
+                    className="flex transition-transform duration-300 ease-in-out"
+                    style={{
+                      transform: `translateX(-${currentImageIndex * 33.333}%)`,
+                    }}
+                  >
+                    {product.images.map((image: string, index: number) => (
+                      <div key={index} className="flex-shrink-0 w-1/3 px-3">
+                        <img
+                          src={image}
+                          alt={`${product.name} ${index + 1}`}
+                          className="w-full h-64 object-cover rounded-xl shadow-md"
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
-            </div>
+
+                {/* Navigation arrows */}
+                {currentImageIndex > 0 && (
+                  <button
+                    onClick={() => setCurrentImageIndex(currentImageIndex - 1)}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 p-2 rounded-full shadow-lg transition-all duration-200 hover:scale-110"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+                )}
+
+                {currentImageIndex < product.images.length - 3 && (
+                  <button
+                    onClick={() => setCurrentImageIndex(currentImageIndex + 1)}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 p-2 rounded-full shadow-lg transition-all duration-200 hover:scale-110"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+                )}
+
+                {/* Dots indicator */}
+                <div className="flex justify-center mt-6 space-x-2">
+                  {Array.from({ length: product.images.length - 2 }).map(
+                    (_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-3 h-3 rounded-full transition-colors duration-200 ${
+                          currentImageIndex === index
+                            ? "bg-gray-700"
+                            : "bg-gray-300 hover:bg-gray-400"
+                        }`}
+                      />
+                    )
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -679,13 +745,11 @@ const ProductPage: React.FC = () => {
                 }`}
               >
                 <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                  Medical Indications
+                  {t("e3hand.medicalIndications.title")}
                 </h2>
                 <div className="bg-white rounded-2xl p-8 shadow-lg">
                   <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                    Gripability e3 is indicated when its use replaces missing or
-                    lost functions of the upper extremity or supplements
-                    existing functions.
+                    {t("e3hand.medicalIndications.indication")}
                   </p>
                   <div className="grid md:grid-cols-2 gap-6">
                     {product.medicalIndications?.map(
@@ -715,13 +779,10 @@ const ProductPage: React.FC = () => {
                 }`}
               >
                 <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                  Four Strong Modules
+                  {t("e3hand.components.title")}
                 </h2>
                 <p className="text-lg text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-                  The heart of the Gripability e3 gripping system is the
-                  backpack module, a mobile and intelligent powerhouse. This
-                  high-tech component gives Gripability e3 the power and gives
-                  the user control.
+                  {t("e3hand.components.description")}
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                   {product.modules?.map((module: Module, index: number) => (
@@ -765,15 +826,12 @@ const ProductPage: React.FC = () => {
                 }`}
               >
                 <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                  Child's Play Operation
+                  {t("e3hand.operation.title")}
                 </h2>
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                   <div>
                     <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-                      State-of-the-art technology makes it possible to operate
-                      Gripability e3 completely without effort. You can switch
-                      between 3 preset gripping forces, operate the gripper, and
-                      activate a key lock.
+                      {t("e3hand.operation.description")}
                     </p>
                     <div className="space-y-6">
                       <div className="flex items-start space-x-4">
@@ -784,11 +842,10 @@ const ProductPage: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                            Activate the System
+                            {t("e3hand.operation.step1.title")}
                           </h3>
                           <p className="text-gray-600">
-                            Touch the Gripability logo to activate the gripping
-                            system.
+                            {t("e3hand.operation.step1.description")}
                           </p>
                         </div>
                       </div>
@@ -801,12 +858,10 @@ const ProductPage: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                            Position and Grip
+                            {t("e3hand.operation.step2.title")}
                           </h3>
                           <p className="text-gray-600">
-                            Place the object between the gripping fingers and
-                            touch the gripper symbol. The gripper closes
-                            securely.
+                            {t("e3hand.operation.step2.description")}
                           </p>
                         </div>
                       </div>
@@ -819,12 +874,10 @@ const ProductPage: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                            Adjust Grip Force
+                            {t("e3hand.operation.step3.title")}
                           </h3>
                           <p className="text-gray-600">
-                            Use the force symbol to regulate grip strength:
-                            "mini" for delicate items like crackers, "maxi" for
-                            secure holding of cups.
+                            {t("e3hand.operation.step3.description")}
                           </p>
                         </div>
                       </div>
@@ -833,37 +886,37 @@ const ProductPage: React.FC = () => {
 
                   <div className="bg-white rounded-2xl p-8 shadow-lg">
                     <h3 className="text-xl font-bold text-purple-800 mb-6 text-center">
-                      Key Features
+                      {t("keyFeatures")}
                     </h3>
                     <div className="space-y-4">
                       <div className="flex items-center space-x-3">
                         <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                         <span className="text-gray-700">
-                          3 adjustable gripping force levels
+                          {t("product.e3hand.features.3")}
                         </span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                         <span className="text-gray-700">
-                          Touch-sensitive control symbols
+                          {t("e3hand.features.touchSensitive")}
                         </span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                         <span className="text-gray-700">
-                          Compatible with standard Reha switches
+                          {t("e3hand.features.rehaCompatible")}
                         </span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                         <span className="text-gray-700">
-                          200-400 gripping operations per charge
+                          {t("product.e3hand.features.2")}
                         </span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                         <span className="text-gray-700">
-                          Muscle or voice sensor control options
+                          {t("e3hand.features.voiceControl")}
                         </span>
                       </div>
                     </div>
@@ -884,7 +937,7 @@ const ProductPage: React.FC = () => {
                 }`}
               >
                 <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                  Life Applications
+                  {t("e3hand.lifeApplications")}
                 </h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {product.applications
@@ -907,7 +960,7 @@ const ProductPage: React.FC = () => {
                             <Briefcase className="w-6 h-6 text-white" />
                           )}
                           {index === 3 && (
-                            <Play className="w-6 h-6 text-white" />
+                            <Zap className="w-6 h-6 text-white" />
                           )}
                           {index === 4 && (
                             <Hand className="w-6 h-6 text-white" />
@@ -937,12 +990,12 @@ const ProductPage: React.FC = () => {
                 }`}
               >
                 <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                  Insurance Coverage & Certification
+                  {t("e3hand.insurance.title")}
                 </h2>
                 <div className="grid lg:grid-cols-2 gap-8">
                   <div className="bg-white rounded-2xl p-8 shadow-lg">
                     <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                      Recognized Medical Device
+                      {t("e3hand.insurance.recognizedDevice")}
                     </h3>
                     <div className="space-y-4">
                       <div>
@@ -950,21 +1003,23 @@ const ProductPage: React.FC = () => {
                           Hilfsmittel Number:
                         </span>
                         <span className="ml-2 text-purple-600 font-mono">
-                          02.40.04.4001
+                          {t("e3hand.insurance.number")}
                         </span>
                       </div>
                       <div>
                         <span className="font-medium text-gray-700">
                           Product Designation:
                         </span>
-                        <span className="ml-2">Gripability e3 - Serie I</span>
+                        <span className="ml-2">
+                          {t("e3hand.insurance.product")}
+                        </span>
                       </div>
                       <div>
                         <span className="font-medium text-gray-700">
                           Certification:
                         </span>
                         <span className="ml-2">
-                          CE certified, EU Medical Device Directive 93/42/EEC
+                          {t("e3hand.insurance.certification")}
                         </span>
                       </div>
                     </div>
@@ -972,19 +1027,17 @@ const ProductPage: React.FC = () => {
 
                   <div className="bg-white rounded-2xl p-8 shadow-lg">
                     <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                      Funding Options
+                      {t("e3hand.funding.title")}
                     </h3>
                     <p className="text-gray-600 mb-4">
-                      As an everyday aid and with appropriate indication,
-                      Gripability e3 is prescribed by a doctor and financed by
-                      the responsible benefit provider.
+                      {t("e3hand.funding.description")}
                     </p>
                     <div className="space-y-2 text-sm text-gray-600">
-                      <div>• Health insurance (daily living)</div>
-                      <div>• Accident insurance (workplace/education)</div>
-                      <div>• Pension insurance</div>
-                      <div>• Employment agency</div>
-                      <div>• Integration office</div>
+                      <div>• {t("e3hand.funding.health")}</div>
+                      <div>• {t("e3hand.funding.accident")}</div>
+                      <div>• {t("e3hand.funding.pension")}</div>
+                      <div>• {t("e3hand.funding.employment")}</div>
+                      <div>• {t("e3hand.funding.integration")}</div>
                     </div>
                   </div>
                 </div>

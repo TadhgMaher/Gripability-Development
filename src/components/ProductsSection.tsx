@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
+import { getAssetPath } from "../utils/assets";
 
 const ProductsSection: React.FC = () => {
   const { t } = useLanguage();
@@ -30,28 +31,28 @@ const ProductsSection: React.FC = () => {
       id: "e3-hand",
       name: t("products.e3hand.name"),
       description: t("products.e3hand.desc"),
-      image: "/E3Photo1.jpg",
+      image: getAssetPath("/E3Photo1.jpg"),
       color: "from-purple-500 to-purple-600",
     },
     {
       id: "x-hand",
       name: t("products.xhand.name"),
       description: t("products.xhand.desc"),
-      image: "/XHand.jpg",
+      image: getAssetPath("/XHand.jpg"),
       color: "from-blue-500 to-blue-600",
     },
     {
       id: "b-hand",
       name: t("products.bhand.name"),
       description: t("products.bhand.desc"),
-      image: "/BHand1.jpg",
+      image: getAssetPath("/BHand1.jpg"),
       color: "from-orange-500 to-orange-600",
     },
     {
       id: "t-brush",
       name: t("products.tbrush.name"),
       description: t("products.tbrush.desc"),
-      image: "/TBrush.jpg",
+      image: getAssetPath("/TBrush.jpg"),
       color: "from-emerald-500 to-emerald-600",
     },
   ];

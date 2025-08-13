@@ -52,7 +52,7 @@ const translations: LanguageTranslations = {
     "products.tbrush.name": "T-Brush",
     "products.tbrush.desc":
       "A toothbrush adapter for people with reduced grip strength. Lightweight. Easy to use.",
-    "products.e3hand.name": "E.Hand",
+    "products.e3hand.name": "E-Hand",
     "products.e3hand.desc":
       "A pneumatic-powered automatic gripping system for home, school, and work—customizable for hand, head, or alternative use points.",
     "products.bhand.name": "B-Hand",
@@ -95,7 +95,24 @@ const translations: LanguageTranslations = {
 
     // Downloads
     "downloads.headline": "Download Center",
+    "downloads.description":
+      "Download detailed technical specifications and user guides for all our products.",
     "downloads.pdf": "Download PDF",
+
+    // Footer
+    "footer.description":
+      "Empowering independence through advanced assistive technology. Engineered in Germany. Trusted worldwide for over 20 years.",
+    "footer.quickLinks": "Quick Links",
+    "footer.impressum": "Certification",
+    "footer.copyright": "© 2025 GripAbility. All rights reserved.",
+
+    // Contact
+    "contact.getInTouch": "Get in Touch",
+    "contact.emailLabel": "Email",
+    "contact.phoneLabel": "Phone",
+    "contact.messageSent": "Message Sent!",
+    "contact.responseTime": "We'll get back to you within 24 hours.",
+    "contact.requestConsultation": "Request Consultation",
 
     // Product Page
     "product.consultation": "Consultation Required",
@@ -195,7 +212,7 @@ const translations: LanguageTranslations = {
 
     // Product Page - long descriptions (English)
     "product.e3hand.longDescription":
-      "Gripability e3 is an automatic and extremely comfortable gripping system that allows you to gain a high degree of independence and activity in your personal daily life. This long-proven assistive device opens up new possibilities for shaping your life and accompanies you wherever you go. Take your life into your own hands with this innovative pneumatic-powered gripping technology.",
+      "Gripability e-hand is an automatic and extremely comfortable gripping system that allows you to gain a high degree of independence and activity in your personal daily life. This long-proven assistive device opens up new possibilities for shaping your life and accompanies you wherever you go. Take your life into your own hands with this innovative pneumatic-powered gripping technology.",
     "product.xhand.longDescription":
       "Gripability x.hand is a system construction kit for designing adaptive workplaces. It was developed to expand individual capabilities in educational, school, and professional environments. The multitude of its individual parts form a logical concept where each component fits perfectly with the others, creating endless possibilities for custom workplace solutions.",
     "product.bhand.longDescription":
@@ -353,6 +370,121 @@ const translations: LanguageTranslations = {
     "product.e3hand.features.3": "3 adjustable gripping force levels",
     "product.e3hand.features.4": "CE certified medical device",
 
+    // E3 Hand detailed English content
+    "e3hand.headline":
+      "The automatic gripping system for more activity and independence",
+    "e3hand.subtitle": "in daily life, work and leisure",
+    "e3hand.description":
+      "Gripability e-hand is an automatic and extremely comfortable gripping system that allows you to gain a high degree of independence and activity in your personal daily life.",
+
+    // E3 Hand Applications
+    "e3hand.applications.daily.title": "Daily Life in Your Grasp",
+    "e3hand.applications.daily.description":
+      "A fork, spoon, roll or slice of bread, piece of pizza or cookie, keys or phone, newspaper or postcard - these and many other things from your daily life can be easily grasped with Gripability e-hand.",
+
+    "e3hand.applications.education.title": "Understanding Knowledge",
+    "e3hand.applications.education.description":
+      "Every day enriches us with experiences. With Gripability e-hand, you effortlessly 'grasp' the things around you. Use writing and drawing utensils, actively participate in experiments and projects, and work with modern technical devices.",
+
+    "e3hand.applications.career.title": "Career in Your Grasp",
+    "e3hand.applications.career.description":
+      "The ability to grip and hold various objects is essential in most professions. Use Gripability e-hand to handle workpieces, tools, documents, telephone or other items and thus open up new work areas.",
+
+    "e3hand.applications.leisure.title": "New Action Possibilities",
+    "e3hand.applications.leisure.description":
+      "Playing guarantees togetherness, fun and excitement. Whether board games, card games, dice games or learning games, individually or as a team - participation is everything. With Gripability e-hand, you have the game in your hands.",
+
+    "e3hand.applications.creative.title": "Taking Initiative",
+    "e3hand.applications.creative.description":
+      "You like to work and design creatively, you have a preference for crafting and tinkering, you make music or cook with passion? To freely develop your talents, dynamics and joy of life, you have a versatile tool at hand with Gripability e-hand.",
+
+    // E3 Hand Medical Indications
+    "e3hand.medicalIndications.title": "Medical Indications",
+    "e3hand.medicalIndications.description":
+      "Medical indications for using the Gripability e-hand gripping system:",
+    "e3hand.medicalIndications.tetraplegia":
+      "Tetraplegia, Tetraspasticity, Tetraparesis",
+    "e3hand.medicalIndications.hemiparesis": "Hemiparesis, Muscular Dystrophy",
+    "e3hand.medicalIndications.postpolio": "Post-Polio Syndrome, Dysmelia",
+    "e3hand.medicalIndications.muscle":
+      "Functional failures of hand muscles due to nerve system or muscle diseases",
+    "e3hand.medicalIndications.indication":
+      "Gripability e-hand is indicated when its use replaces missing or lost functions of the upper extremity or supplements existing functions.",
+
+    // E3 Hand System Components
+    "e3hand.components.title": "Four Strong Modules",
+    "e3hand.components.gripper.title": "The Gripping Module",
+    "e3hand.components.gripper.description":
+      "consists of a gripper and an adaptation and is used on the hand or another body part",
+
+    "e3hand.components.control.title": "The Control Module",
+    "e3hand.components.control.description":
+      "is positioned so that you can control Gripability e-hand well",
+
+    "e3hand.components.backpack.title": "The Backpack Module",
+    "e3hand.components.backpack.description":
+      "is preferably transported on the backrest of a wheelchair and is the heart of the Gripability e-hand gripping system - a mobile and intelligent power pack",
+
+    "e3hand.components.compressor.title": "The Compressor Module",
+    "e3hand.components.compressor.description":
+      "the gas station for the Gripability e-hand system, is kept stationary (e.g. at home)",
+
+    // E3 Hand Operation
+    "e3hand.operation.title": "Child's Play Operation",
+    "e3hand.operation.description":
+      "State-of-the-art technology makes it possible to operate Gripability e-hand completely without effort. You can switch between 3 preset gripping forces, operate the gripper, and activate a key lock.",
+
+    "e3hand.operation.step1.title": "Activate System",
+    "e3hand.operation.step1.description":
+      "Touch the Gripability logo to activate the gripping system.",
+
+    "e3hand.operation.step2.title": "Position Object",
+    "e3hand.operation.step2.description":
+      "Place the object between the gripping fingers and touch the gripper symbol.",
+
+    "e3hand.operation.step3.title": "Regulate Gripping Force",
+    "e3hand.operation.step3.description":
+      "Use the force symbol to regulate the gripping force, e.g. 'mini' for gripping a cracker so it doesn't break and 'maxi' for holding a cup.",
+
+    // E3 Hand Adaptation
+    "e3hand.adaptation.title": "Adaptable",
+    "e3hand.adaptation.description":
+      "The prerequisite for optimal use of the Gripability e-hand gripping system is a supply tailored to your personal needs. With an intelligent product kit and our many years of practical experience, we ensure that you have everything under control with your Gripability e-hand.",
+    "e3hand.adaptation.gripper":
+      "The gripping module is adapted so that you can handle it optimally. Various grippers and adaptations are available for this purpose.",
+    "e3hand.adaptation.control":
+      "Various buttons and sensors can be placed in the foot, head or hand area to control the gripper. Controls via muscle or voice sensors are also easily realizable.",
+
+    // E3 Hand Insurance & Certification
+    "e3hand.insurance.title": "Insurance Coverage & Certification",
+    "e3hand.insurance.recognizedDevice": "Recognized Medical Device",
+    "e3hand.insurance.number": "02.40.04.4001",
+    "e3hand.insurance.product": "Gripability e-hand - Series I",
+    "e3hand.insurance.description":
+      "Gripability e-hand is a recognized medical aid and is listed in the medical aid directory of statutory health insurance companies according to § 128 SGB V.",
+    "e3hand.insurance.certification":
+      "Gripability products comply with all requirements of the EU Medical Device Directive 93/42/EEC and are CE certified.",
+
+    // E3 Hand Sections
+    "e3hand.lifeApplications": "Life Applications",
+    "e3hand.components.description":
+      "The heart of the Gripability e-hand gripping system is the backpack module, a mobile and intelligent powerhouse. This high-tech component gives Gripability e-hand the power and gives the user control.",
+
+    // Additional feature translations
+    "e3hand.features.touchSensitive": "Touch-sensitive control symbols",
+    "e3hand.features.rehaCompatible": "Compatible with standard Reha switches",
+    "e3hand.features.voiceControl": "Muscle or voice sensor control options",
+
+    // Funding options
+    "e3hand.funding.title": "Funding Options",
+    "e3hand.funding.description":
+      "As an everyday aid and with appropriate indication, Gripability e-hand is prescribed by a doctor and financed by the responsible benefit provider.",
+    "e3hand.funding.health": "Health insurance (daily living)",
+    "e3hand.funding.accident": "Accident insurance (workplace/education)",
+    "e3hand.funding.pension": "Pension insurance",
+    "e3hand.funding.employment": "Employment agency",
+    "e3hand.funding.integration": "Integration office",
+
     "product.bhand.features.0": "Compact and portable",
     "product.bhand.features.1": "Manual operation",
     "product.bhand.features.2": "Immediate functionality",
@@ -368,7 +500,7 @@ const translations: LanguageTranslations = {
   de: {
     // Product Page - long descriptions
     "product.e3hand.longDescription":
-      "Das automatische Greifsystem e.hand (e3) ist ein hochentwickeltes pneumatisch betriebenes Greifsystem für mehr Aktivität und Selbstständigkeit in Alltag, Beruf und Freizeit. Die innovative Konstruktion ermöglicht eine individuelle Anpassung und vielseitige Einsatzmöglichkeiten.",
+      "Das automatische Greifsystem e-hand ist ein hochentwickeltes pneumatisch betriebenes Greifsystem für mehr Aktivität und Selbstständigkeit in Alltag, Beruf und Freizeit. Die innovative Konstruktion ermöglicht eine individuelle Anpassung und vielseitige Einsatzmöglichkeiten.",
     "product.xhand.longDescription":
       "Gripability x.hand ist ein Systembaukasten zur Gestaltung adaptiver Arbeitsplätze. Er wurde zur Erweiterung individueller Handlungsmöglichkeiten in Förder-, Schul- und Berufsumgebungen entwickelt. Die Vielzahl seiner Einzelteile bilden ein logisches Konzept, bei dem eins zum anderen passt. Bauteil für Bauteil. Erleben Sie, wie aus der Fülle unterschiedlicher Komponenten immer wieder neue Arbeitshilfen mit zahllosen Variationsmöglichkeiten entstehen.",
     "product.bhand.longDescription":
@@ -591,11 +723,128 @@ const translations: LanguageTranslations = {
     "product.xhand.features.6":
       "Flüsterleiser Betrieb mit Air-Caddy Kompressor-Option",
 
-    "product.e3hand.features.0": "Pneumatisch betrieben",
-    "product.e3hand.features.1": "Individuell anpassbar",
-    "product.e3hand.features.2": "Für Alltag, Beruf und Freizeit",
-    "product.e3hand.features.3": "Vielseitige Steuerungsoptionen",
-    "product.e3hand.features.4": "Professionelle Einrichtung erforderlich",
+    "product.e3hand.features.0": "Automatisches pneumatisches Greifsystem",
+    "product.e3hand.features.1":
+      "Mobiles Rucksackmodul mit intelligenter Steuerung",
+    "product.e3hand.features.2": "200-400 Greifvorgänge pro Ladung",
+    "product.e3hand.features.3": "3 einstellbare Greifkraftstufen",
+    "product.e3hand.features.4": "CE-zertifiziertes Medizinprodukt",
+
+    // E3 Hand detailed German content
+    "e3hand.headline":
+      "Das automatische Greifsystem für mehr Aktivität und Selbstständigkeit",
+    "e3hand.subtitle": "in Alltag, Beruf und Freizeit",
+    "e3hand.description":
+      "Gripability e-hand ist ein automatisches und damit äußerst komfortables Greifsystem, mit dem Sie bequem ein hohes Maß an Eigenständigkeit und Aktivität in Ihrem persönlichen Alltag gewinnen.",
+
+    // E3 Hand Applications
+    "e3hand.applications.daily.title": "Den Alltag im Griff",
+    "e3hand.applications.daily.description":
+      "Eine Gabel, einen Löffel, ein Brötchen oder eine Scheibe Brot, das Stück Pizza oder den Keks, den Schlüssel oder das Handy, die Zeitung oder die Postkarte - diese und viele andere Dinge aus Ihrem Alltag fest in den Griff zu bekommen, gelingt Ihnen mit Gripability e-hand spielend.",
+
+    "e3hand.applications.education.title": "Wissen begreifen",
+    "e3hand.applications.education.description":
+      "Jeder Tag bereichert uns um Erfahrungen. Mit Gripability e-hand 'begreifen' Sie mühelos die Dinge um Sie herum. Benutzen Sie Schreib- und Zeichenutensilien, beteiligen Sie sich aktiv an Versuchen und Projekten und arbeiten Sie mit modernen technischen Geräten.",
+
+    "e3hand.applications.career.title": "Die Karriere im Griff",
+    "e3hand.applications.career.description":
+      "Die Fähigkeit verschiedenste Gegenstände greifen und halten zu können ist in den meisten Berufen unabdingbar. Nutzen Sie Gripability e-hand um Werkstücke, Werkzeuge, Dokumente, das Telefon oder andere Dinge zu handhaben und erschließen Sie sich somit neue Arbeitsbereiche.",
+
+    "e3hand.applications.leisure.title": "Neue Handlungsspielräume",
+    "e3hand.applications.leisure.description":
+      "Spielen garantiert Gemeinsamkeit, Spaß und Spannung. Ob Brett-, Karten-, Würfel- oder Lernspiele, jeder für sich oder im Team - dabei sein ist alles. Mit Gripability e-hand haben Sie das Spielgeschehen in der Hand.",
+
+    "e3hand.applications.creative.title": "Initiative ergreifen",
+    "e3hand.applications.creative.description":
+      "Sie arbeiten und gestalten gerne kreativ, Sie haben eine Vorliebe für Werken und Basteln, Sie musizieren oder kochen mit Leidenschaft? Um Ihre Talente, Ihre Dynamik und Ihre Lebensfreude frei zu entfalten, haben Sie mit Gripability e-hand ein vielseitiges Werkzeug zur Hand.",
+
+    // E3 Hand Medical Indications
+    "e3hand.medicalIndications.title": "Medizinische Indikationen",
+    "e3hand.medicalIndications.description":
+      "Medizinische Indikationen für den Einsatz des Gripability e-hand Greifsystems:",
+    "e3hand.medicalIndications.tetraplegia":
+      "Tetraplegie, Tetraspastik, Tetraparese",
+    "e3hand.medicalIndications.hemiparesis": "Hemiparese, Muskeldystrophie",
+    "e3hand.medicalIndications.postpolio": "Postpolio-Syndrom, Dysmelie",
+    "e3hand.medicalIndications.muscle":
+      "Funktionsausfälle von Handmuskeln infolge Nerven(system)- oder Muskelerkrankungen",
+    "e3hand.medicalIndications.indication":
+      "Gripability e-hand ist indiziert, wenn ihr Einsatz nicht vorhandene oder verloren gegangene Funktionen der oberen Extremität ersetzt bzw. noch vorhandene Funktionen ergänzt.",
+
+    // E3 Hand System Components
+    "e3hand.components.title": "Vier starke Module",
+    "e3hand.components.gripper.title": "Das Greifmodul",
+    "e3hand.components.gripper.description":
+      "besteht aus einem Greifer und einer Adaption und wird an der Hand oder einem anderen Körperteil verwendet",
+
+    "e3hand.components.control.title": "Das Bedienmodul",
+    "e3hand.components.control.description":
+      "wird so positioniert, dass Sie Gripability e-hand gut steuern können",
+
+    "e3hand.components.backpack.title": "Das Rucksackmodul",
+    "e3hand.components.backpack.description":
+      "wird vorzugsweise an der Rückenlehne eines Rollstuhls transportiert und ist das Herz des Gripability e-hand Greifsystems - ein mobiles und intelligentes Kraftpaket",
+
+    "e3hand.components.compressor.title": "Das Kompressormodul",
+    "e3hand.components.compressor.description":
+      "die Tankstelle für das Gripability e-hand System, wird stationär (z.B. Zuhause) bereitgehalten",
+
+    // E3 Hand Operation
+    "e3hand.operation.title": "Kinderleicht in der Bedienung",
+    "e3hand.operation.description":
+      "Modernste Technologie macht es möglich Gripability e-hand völlig ohne Kraftaufwand zu bedienen. Sie können zwischen 3 voreingestellten Greifkräften wechseln, den Greifer betätigen und eine Tastensperre aktivieren.",
+
+    "e3hand.operation.step1.title": "System aktivieren",
+    "e3hand.operation.step1.description":
+      "Um das Greifsystem zu aktivieren, berühren Sie das Gripability Logo.",
+
+    "e3hand.operation.step2.title": "Objekt positionieren",
+    "e3hand.operation.step2.description":
+      "Platzieren Sie das Objekt zwischen den Greiffingern und berühren Sie das Greifer-Symbol.",
+
+    "e3hand.operation.step3.title": "Greifkraft regulieren",
+    "e3hand.operation.step3.description":
+      "Über das Kraft-Symbol regulieren Sie die Greifkraft, z.B. 'mini' für das Greifen eines Knäckebrotes, damit es nicht bricht und 'maxi' zum Halten einer Tasse.",
+
+    // E3 Hand Adaptation
+    "e3hand.adaptation.title": "Anpassungsfähig",
+    "e3hand.adaptation.description":
+      "Voraussetzung für den optimalen Einsatz des Gripability e-hand Greifsystems ist eine auf Ihre persönlichen Bedürfnisse ausgelegte Versorgung. Mit einem intelligenten Produktbaukasten sowie unseren langjährigen praktischen Erfahrungen stellen wir sicher, dass Sie mit Ihrem Gripability e-hand alles im Griff haben.",
+    "e3hand.adaptation.gripper":
+      "Das Greifmodul wird so angepasst, dass Sie damit optimal hantieren können. Verschiedene Greifer und Adaptionen stehen hierfür zur Verfügung.",
+    "e3hand.adaptation.control":
+      "Zur Steuerung des Greifers können verschiedenste Taster und Sensoren im Fuß-, Kopf- oder Handbereich platziert werden. Außerdem sind auch Steuerungen über Muskel- oder Sprachsensoren ganz einfach realisierbar.",
+
+    // E3 Hand Insurance & Certification
+    "e3hand.insurance.title": "Hilfsmittelnummer & Zertifizierung",
+    "e3hand.insurance.recognizedDevice": "Anerkanntes Medizinprodukt",
+    "e3hand.insurance.number": "02.40.04.4001",
+    "e3hand.insurance.product": "Gripability e-hand - Serie I",
+    "e3hand.insurance.description":
+      "Gripability e-hand ist ein anerkanntes Hilfsmittel und im Hilfsmittelverzeichnis der gesetzlichen Krankenkassen nach § 128 SGB V unter folgender Positionsnummer gelistet.",
+    "e3hand.insurance.certification":
+      "Gripability Produkte entsprechen allen Anforderungen der EU-Richtlinie über Medizinprodukte 93/42/EWG und sind CE-Zertifiziert.",
+
+    // E3 Hand Sections
+    "e3hand.lifeApplications": "Anwendungsbereiche",
+    "e3hand.components.description":
+      "Das Herz des Gripability e-hand Greifsystems ist das Rucksackmodul, ein mobiles und intelligentes Kraftpaket. Diese Hightech-Komponente gibt Gripability e-hand die Power und dem Anwender die Kontrolle.",
+
+    // Additional feature translations
+    "e3hand.features.touchSensitive": "Berührungsempfindliche Steuersymbole",
+    "e3hand.features.rehaCompatible": "Kompatibel mit Standard-Reha-Schaltern",
+    "e3hand.features.voiceControl":
+      "Muskel- oder Sprachsensor-Steuerungsoptionen",
+
+    // Funding options
+    "e3hand.funding.title": "Finanzierungsmöglichkeiten",
+    "e3hand.funding.description":
+      "Als Alltagshilfe und bei entsprechender Indikation wird das Greif-Hilfsmittel Gripability e-hand vom Arzt verordnet und vom zuständigen Leistungsträger finanziert.",
+    "e3hand.funding.health": "Krankenversicherung (Alltag)",
+    "e3hand.funding.accident": "Unfallversicherung (Arbeitsplatz/Ausbildung)",
+    "e3hand.funding.pension": "Rentenversicherung",
+    "e3hand.funding.employment": "Arbeitsagentur",
+    "e3hand.funding.integration": "Integrationsamt",
 
     "product.bhand.features.0": "Kompakt und mobil",
     "product.bhand.features.1": "Manuelle Bedienung",
@@ -665,7 +914,7 @@ const translations: LanguageTranslations = {
     // Products
     "products.headline":
       "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung",
-    "products.e3hand.name": "E.Hand",
+    "products.e3hand.name": "E-Hand",
     "products.e3hand.desc":
       "Das automatische Greifsystem für mehr Aktivität und Selbstständigkeit in Alltag, Beruf und Freizeit",
     "products.xhand.name": "X-Hand",
@@ -699,8 +948,26 @@ const translations: LanguageTranslations = {
     "contact.phone": "+49 (0) 6669 90 08 80",
 
     // Downloads
-    "downloads.headline": "Download-Center",
+    "downloads.headline": "Download Center",
+    "downloads.description":
+      "Laden Sie detaillierte technische Spezifikationen und Benutzerhandbücher für alle unsere Produkte herunter.",
     "downloads.pdf": "PDF herunterladen",
+
+    // Footer
+    "footer.description":
+      "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung. Entwickelt in Deutschland. Seit über 20 Jahren vertrauenswürdig.",
+    "footer.quickLinks": "Schnellzugriff",
+    "footer.impressum": "Zertifizierung",
+    "footer.copyright": "© 2025 GripAbility. Alle Rechte vorbehalten.",
+
+    // Contact
+    "contact.getInTouch": "Kontakt aufnehmen",
+    "contact.emailLabel": "E-Mail",
+    "contact.phoneLabel": "Telefon",
+    "contact.messageSent": "Nachricht gesendet!",
+    "contact.responseTime":
+      "Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
+    "contact.requestConsultation": "Beratung anfragen",
 
     // Product Page
     "product.consultation": "Produktberatung",

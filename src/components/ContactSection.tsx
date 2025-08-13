@@ -94,7 +94,7 @@ const ContactSection: React.FC = () => {
           >
             <div className="bg-white p-8 rounded-2xl shadow-lg h-full flex flex-col">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                Get in Touch
+                {t("contact.getInTouch")}
               </h3>
               <div className="space-y-6 flex-grow">
                 <div className="flex items-start space-x-4">
@@ -103,7 +103,7 @@ const ContactSection: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="text-lg font-semibold text-gray-900 mb-1">
-                      Email
+                      {t("contact.emailLabel")}
                     </h4>
                     <a
                       href={`mailto:${t("contact.email")}`}
@@ -119,7 +119,7 @@ const ContactSection: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="text-lg font-semibold text-gray-900 mb-1">
-                      Phone
+                      {t("contact.phoneLabel")}
                     </h4>
                     <a
                       href={`tel:${t("contact.phone").replace(/\s/g, "")}`}
@@ -156,16 +156,14 @@ const ContactSection: React.FC = () => {
                   <Check className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-emerald-700 mb-2">
-                  Message Sent!
+                  {t("contact.messageSent")}
                 </h3>
-                <p className="text-emerald-600">
-                  We'll get back to you within 24 hours.
-                </p>
+                <p className="text-emerald-600">{t("contact.responseTime")}</p>
               </div>
             ) : (
               <div className="bg-white p-8 rounded-2xl shadow-lg">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                  Request Consultation
+                  {t("contact.requestConsultation")}
                 </h3>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">

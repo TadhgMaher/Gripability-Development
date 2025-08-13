@@ -1,22 +1,45 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { getAssetPath } from "../utils/assets";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleLanguage = () => {
     setLanguage(language === "en" ? "de" : "en");
   };
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    // If we're not on the home page, navigate to home first
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Wait for navigation to complete before scrolling
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
     setIsMenuOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    navigate("/");
+    // Ensure we scroll to top when clicking logo
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 100);
   };
 
   return (
@@ -24,10 +47,13 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
+          <div
+            onClick={handleLogoClick}
+            className="flex items-center space-x-3 group cursor-pointer"
+          >
             <div className="w-12 h-12 rounded-lg overflow-hidden group-hover:scale-105 transition-transform duration-200">
               <img
-                src="/Logo.jpg"
+                src={getAssetPath("/Logo.jpg")}
                 alt="GripAbility Logo"
                 className="w-full h-full object-cover"
               />
@@ -36,7 +62,7 @@ const Header: React.FC = () => {
               <span className="text-red-600">GRIP</span>
               <span className="text-emerald-600">ABILITY</span>
             </span>
-          </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
@@ -51,12 +77,6 @@ const Header: React.FC = () => {
               className="text-gray-700 hover:text-emerald-600 transition-colors duration-200"
             >
               {t("nav.products")}
-            </button>
-            <button
-              onClick={() => scrollToSection("consultation")}
-              className="text-gray-700 hover:text-emerald-600 transition-colors duration-200"
-            >
-              {t("nav.consultation")}
             </button>
             <button
               onClick={() => scrollToSection("contact")}
