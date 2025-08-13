@@ -6,9 +6,26 @@ import { getAssetPath } from "../utils/assets";
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
   useEffect(() => {
     setIsVisible(true);
+
+    // Add scroll listener to hide the scroll indicator
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setShowScrollIndicator(false);
+      } else {
+        setShowScrollIndicator(true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const scrollToProducts = () => {
@@ -114,8 +131,10 @@ const HeroSection: React.FC = () => {
 
         {/* Scroll indicator */}
         <div
-          className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-all duration-1000 delay-1100 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-all duration-500 ${
+            isVisible && showScrollIndicator
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-4 pointer-events-none"
           }`}
         >
           <button
