@@ -74,7 +74,7 @@ const ProductsSection: React.FC = () => {
           {products.map((product, index) => (
             <div
               key={product.id}
-              className={`group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 overflow-hidden ${
+              className={`group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 overflow-hidden flex flex-col h-full ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-8"
@@ -82,7 +82,7 @@ const ProductsSection: React.FC = () => {
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               {/* Product Image */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-48 overflow-hidden flex-shrink-0">
                 <img
                   src={product.image}
                   alt={product.name}
@@ -94,17 +94,17 @@ const ProductsSection: React.FC = () => {
               </div>
 
               {/* Product Info */}
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
                   {product.name}
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">
                   {product.description}
                 </p>
 
                 <Link
                   to={`/product/${product.id}`}
-                  className="group/link inline-flex items-center space-x-2 text-emerald-600 hover:text-emerald-700 font-semibold transition-colors duration-200"
+                  className="group/link inline-flex items-center space-x-2 text-emerald-600 hover:text-emerald-700 font-semibold transition-colors duration-200 mt-auto"
                 >
                   <span>{t("products.viewProduct")}</span>
                   <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-200" />

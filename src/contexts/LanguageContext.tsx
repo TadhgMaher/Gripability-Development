@@ -46,16 +46,16 @@ const translations: LanguageTranslations = {
 
     // Products
     "products.headline": "Smart Tools. Real Independence.",
-    "products.xhand.name": "X-Hand",
+    "products.xhand.name": "x.hand",
     "products.xhand.desc":
       "Modular workplace assistive system built with high-quality pneumatics and adaptable components.",
-    "products.tbrush.name": "T-Brush",
+    "products.tbrush.name": "t.brush",
     "products.tbrush.desc":
       "A toothbrush adapter for people with reduced grip strength. Lightweight. Easy to use.",
-    "products.e3hand.name": "E-Hand",
+    "products.e3hand.name": "e.hand",
     "products.e3hand.desc":
       "A pneumatic-powered automatic gripping system for home, school, and work—customizable for hand, head, or alternative use points.",
-    "products.bhand.name": "B-Hand",
+    "products.bhand.name": "b.hand",
     "products.bhand.desc":
       "A compact, mobile manual grip aid that brings immediate function and freedom to everyday life.",
     "products.viewProduct": "View Product",
@@ -120,7 +120,7 @@ const translations: LanguageTranslations = {
     "product.message": "Message Us About This Product",
 
     // X-Hand specific content
-    "xhand.whoUses": "Who Uses X-Hand?",
+    "xhand.whoUses": "Who Uses x.hand?",
     "xhand.howItWorks": "How Does It Operate?",
     "xhand.technicalSpecs": "Technical Specifications",
     "xhand.applications": "Applications & Benefits",
@@ -913,16 +913,16 @@ const translations: LanguageTranslations = {
     // Products
     "products.headline":
       "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung",
-    "products.e3hand.name": "E-Hand",
+    "products.e3hand.name": "e.hand",
     "products.e3hand.desc":
       "Das automatische Greifsystem für mehr Aktivität und Selbstständigkeit in Alltag, Beruf und Freizeit",
-    "products.xhand.name": "X-Hand",
+    "products.xhand.name": "x.hand",
     "products.xhand.desc":
       "Systembaukasten zur adaptiven Arbeitsplatzgestaltung",
-    "products.bhand.name": "B-Hand",
+    "products.bhand.name": "b.hand",
     "products.bhand.desc":
       "Aktive Greifhilfe für mehr Unabhängigkeit in Alltag, Schule und Beruf",
-    "products.tbrush.name": "T-Brush",
+    "products.tbrush.name": "t.brush",
     "products.tbrush.desc":
       "Die elektrische Zahnbürste mit rotationsfähigem Griffbügel",
     "products.viewProduct": "Produkt ansehen",
@@ -956,7 +956,7 @@ const translations: LanguageTranslations = {
     "footer.description":
       "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung. Entwickelt in Deutschland. Seit über 20 Jahren vertrauenswürdig.",
     "footer.quickLinks": "Schnellzugriff",
-    "footer.impressum": "Zertifizierung",
+    "footer.impressum": "Impressum",
     "footer.copyright": "© 2025 GripAbility. Alle Rechte vorbehalten.",
 
     // Contact

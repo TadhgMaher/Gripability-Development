@@ -185,7 +185,7 @@ const ProductPage: React.FC = () => {
           t("product.e3hand.features.3"),
           t("product.e3hand.features.4"),
         ],
-        color: "from-purple-500 to-purple-600",
+        color: "from-emerald-500 to-emerald-600",
         technicalSpecs: {
           grippingOperations: "200-400 per charge",
           grippingForces: "3 adjustable levels (mini/medium/maxi)",
@@ -256,7 +256,7 @@ const ProductPage: React.FC = () => {
           t("product.bhand.features.3"),
           t("product.bhand.features.4"),
         ],
-        color: "from-orange-500 to-orange-600",
+        color: "from-emerald-500 to-emerald-600",
         medicalIndications: [
           t("bhand.indications.muscle"),
           t("bhand.indications.paresis"),
