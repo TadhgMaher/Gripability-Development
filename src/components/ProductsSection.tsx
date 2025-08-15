@@ -32,7 +32,7 @@ const ProductsSection: React.FC = () => {
       name: t("products.e3hand.name"),
       description: t("products.e3hand.desc"),
       image: getAssetPath("/E3Photo1.jpg"),
-      color: "from-purple-500 to-purple-600",
+      color: "from-red-500 to-red-600",
     },
     {
       id: "x-hand",
@@ -46,14 +46,14 @@ const ProductsSection: React.FC = () => {
       name: t("products.bhand.name"),
       description: t("products.bhand.desc"),
       image: getAssetPath("/BHand1.jpg"),
-      color: "from-orange-500 to-orange-600",
+      color: "from-emerald-500 to-emerald-600",
     },
     {
       id: "t-brush",
       name: t("products.tbrush.name"),
       description: t("products.tbrush.desc"),
       image: getAssetPath("/TBrush.jpg"),
-      color: "from-emerald-500 to-emerald-600",
+      color: "from-yellow-500 to-yellow-600",
     },
   ];
 

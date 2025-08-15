@@ -330,7 +330,7 @@ const ProductPage: React.FC = () => {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="px-4 py-2 rounded-full text-sm font-semibold flex items-center space-x-2 bg-orange-100 text-orange-600">
+                  <div className="px-4 py-2 rounded-full text-sm font-semibold flex items-center space-x-2 bg-emerald-100 text-emerald-600">
                     <AlertCircle className="w-4 h-4" />
                     <span>{t("product.consultation")}</span>
                   </div>
@@ -720,7 +720,7 @@ const ProductPage: React.FC = () => {
       {productId === "e3-hand" && (
         <>
           {/* Medical Indications Section */}
-          <section className="py-16 bg-blue-50">
+          <section className="py-16 bg-gray-50">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <div
                 className={`transition-all duration-1000 delay-300 ease-out ${
@@ -801,7 +801,7 @@ const ProductPage: React.FC = () => {
           </section>
 
           {/* How to Use Section */}
-          <section className="py-16 bg-purple-50">
+          <section className="py-16 bg-gray-50">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <div
                 className={`transition-all duration-1000 delay-700 ease-out ${
@@ -870,36 +870,36 @@ const ProductPage: React.FC = () => {
                   </div>
 
                   <div className="bg-white rounded-2xl p-8 shadow-lg">
-                    <h3 className="text-xl font-bold text-purple-800 mb-6 text-center">
+                    <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">
                       {t("keyFeatures")}
                     </h3>
                     <div className="space-y-4">
                       <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                         <span className="text-gray-700">
                           {t("product.e3hand.features.3")}
                         </span>
                       </div>
                       <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                         <span className="text-gray-700">
                           {t("e3hand.features.touchSensitive")}
                         </span>
                       </div>
                       <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                         <span className="text-gray-700">
                           {t("e3hand.features.rehaCompatible")}
                         </span>
                       </div>
                       <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                         <span className="text-gray-700">
                           {t("product.e3hand.features.2")}
                         </span>
                       </div>
                       <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                         <span className="text-gray-700">
                           {t("e3hand.features.voiceControl")}
                         </span>
@@ -987,7 +987,7 @@ const ProductPage: React.FC = () => {
                         <span className="font-medium text-gray-700">
                           Hilfsmittel Number:
                         </span>
-                        <span className="ml-2 text-purple-600 font-mono">
+                        <span className="ml-2 text-emerald-600 font-mono">
                           {t("e3hand.insurance.number")}
                         </span>
                       </div>
@@ -1289,20 +1289,20 @@ const ProductPage: React.FC = () => {
                   </div>
 
                   <div className="relative">
-                    <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-8">
+                    <div className="bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-2xl p-8">
                       <div className="text-center">
-                        <h3 className="text-xl font-bold text-orange-800 mb-4">
+                        <h3 className="text-xl font-bold text-emerald-800 mb-4">
                           <Hand className="w-6 h-6 inline mr-2" />
                           {t("bhand.grip.title")}
                         </h3>
-                        <p className="text-orange-700 mb-6">
+                        <p className="text-emerald-700 mb-6">
                           {t("bhand.grip.description")}
                         </p>
                         <div className="bg-white rounded-lg p-4">
                           <div className="font-semibold text-gray-900 mb-2">
                             "Die Kunst Dinge zu be.greifen"
                           </div>
-                          <div className="text-orange-600 text-sm">
+                          <div className="text-emerald-600 text-sm">
                             The Art of Handling Things
                           </div>
                         </div>
@@ -1315,7 +1315,7 @@ const ProductPage: React.FC = () => {
           </section>
 
           {/* Key Benefits Section */}
-          <section className="py-16 bg-orange-50">
+          <section className="py-16 bg-gray-50">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <div
                 className={`transition-all duration-1000 delay-500 ease-out ${
