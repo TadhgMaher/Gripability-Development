@@ -44,7 +44,7 @@ interface Product {
   images: string[];
   features: string[];
   color: string;
-  technicalSpecs?: TechnicalSpecs;
+  technicalSpecs?: TechnicalSpecs | string[];
   applications?: Application[];
   medicalIndications?: string[];
   modules?: Module[];
@@ -66,6 +66,28 @@ const ProductPage: React.FC = () => {
     setCurrentImageIndex(0); // Reset carousel when product changes
     window.scrollTo(0, 0);
   }, [productId]);
+
+  const handleBackToProducts = () => {
+    navigate("/");
+    // Wait for navigation to complete, then scroll to products section
+    setTimeout(() => {
+      const productsElement = document.getElementById("products");
+      if (productsElement) {
+        productsElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
+
+  const handleContactScroll = () => {
+    navigate("/");
+    // Wait for navigation to complete, then scroll to contact section
+    setTimeout(() => {
+      const contactElement = document.getElementById("contact");
+      if (contactElement) {
+        contactElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
 
   const handleContactNavigation = () => {
     navigate("/");
@@ -99,7 +121,7 @@ const ProductPage: React.FC = () => {
           t("product.xhand.features.5"),
           t("product.xhand.features.6"),
         ],
-        color: "from-emerald-500 to-emerald-600",
+        color: "from-emerald-400 via-emerald-500 to-emerald-700",
         technicalSpecs: {
           grippingForce: "22N - 110N",
           workingPressure: "2-8 bar",
@@ -141,7 +163,7 @@ const ProductPage: React.FC = () => {
           t("product.tbrush.features.3"),
           t("product.tbrush.features.4"),
         ],
-        color: "from-emerald-500 to-emerald-600",
+        color: "from-emerald-400 via-emerald-500 to-emerald-700",
         medicalIndications: [
           t("tbrush.indications.tetraplegia"),
           t("tbrush.indications.hemiparesis"),
@@ -185,22 +207,29 @@ const ProductPage: React.FC = () => {
           t("product.e3hand.features.3"),
           t("product.e3hand.features.4"),
         ],
-        color: "from-emerald-500 to-emerald-600",
-        technicalSpecs: {
-          grippingOperations: "200-400 per charge",
-          grippingForces: "3 adjustable levels (mini/medium/maxi)",
-          powerSource: "Pneumatic with mobile compressor",
-          control: "Touch-sensitive symbols",
-          adaptations: "Hand, head, or custom body positions",
-          certification: "CE certified, EU Medical Device Directive 93/42/EEC",
-          hilfsmittelNumber: "02.40.04.4001",
-        },
+        color: "from-emerald-400 via-emerald-500 to-emerald-700",
+        technicalSpecs: [
+          "grippingOperations",
+          "grippingForces",
+          "grippingForceRange",
+          "batteryLife",
+          "chargingTime",
+          "weight",
+          "gripperWeight",
+          "workingPressure",
+          "powerSource",
+          "control",
+          "connectivity",
+          "adaptations",
+          "operatingTemp",
+          "certification",
+          "hilfsmittelNumber",
+        ],
         medicalIndications: [
           t("e3hand.medicalIndications.tetraplegia"),
           t("e3hand.medicalIndications.hemiparesis"),
           t("e3hand.medicalIndications.postpolio"),
           t("e3hand.medicalIndications.muscle"),
-          t("e3hand.medicalIndications.indication"),
         ],
         applications: [
           {
@@ -256,7 +285,7 @@ const ProductPage: React.FC = () => {
           t("product.bhand.features.3"),
           t("product.bhand.features.4"),
         ],
-        color: "from-emerald-500 to-emerald-600",
+        color: "from-emerald-400 via-emerald-500 to-emerald-700",
         medicalIndications: [
           t("bhand.indications.muscle"),
           t("bhand.indications.paresis"),
@@ -319,13 +348,13 @@ const ProductPage: React.FC = () => {
                 : "opacity-0 translate-y-8"
             }`}
           >
-            <Link
-              to="/"
+            <button
+              onClick={handleBackToProducts}
               className="inline-flex items-center space-x-2 text-emerald-600 hover:text-emerald-700 font-semibold mb-8 transition-colors duration-200"
             >
               <ArrowLeft className="w-5 h-5" />
               <span>{t("backToProducts")}</span>
-            </Link>
+            </button>
 
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
@@ -359,6 +388,10 @@ const ProductPage: React.FC = () => {
                           ? getAssetPath("/pdfs/Gripability_x_hand.pdf")
                           : productId === "e3-hand"
                           ? getAssetPath("/pdfs/Gripability_e_hand.pdf")
+                          : productId === "b-hand"
+                          ? getAssetPath("/pdfs/Gripability_b_hand.pdf")
+                          : productId === "t-brush"
+                          ? getAssetPath("/pdfs/Gripability_t_brush.pdf")
                           : "#"
                       }
                       download
@@ -964,6 +997,70 @@ const ProductPage: React.FC = () => {
             </div>
           </section>
 
+          {/* Technical Specifications Section */}
+          <section className="py-16">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div
+                className={`transition-all duration-1000 delay-1000 ease-out ${
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
+                }`}
+              >
+                <h2 className="text-3xl font-bold text-gray-900 mb-8">
+                  {t("e3hand.technicalSpecs")}
+                </h2>
+                <div className="bg-white rounded-2xl shadow-lg p-8">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {product.technicalSpecs &&
+                      (Array.isArray(product.technicalSpecs)
+                        ? product.technicalSpecs.map(
+                            (specKey: string, index: number) => (
+                              <div
+                                key={index}
+                                className="border border-gray-200 rounded-lg p-4"
+                              >
+                                <div className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
+                                  {t(`e3hand.specs.${specKey}`)}
+                                </div>
+                                <div className="text-lg font-semibold text-gray-900">
+                                  {t(`e3hand.specs.${specKey}.value`)}
+                                </div>
+                              </div>
+                            )
+                          )
+                        : Object.entries(product.technicalSpecs).map(
+                            ([key, value]: [string, string], index: number) => (
+                              <div
+                                key={index}
+                                className="border border-gray-200 rounded-lg p-4"
+                              >
+                                <div className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
+                                  {key
+                                    .replace(/([A-Z])/g, " $1")
+                                    .replace(/^./, (str) => str.toUpperCase())}
+                                </div>
+                                <div className="text-lg font-semibold text-gray-900">
+                                  {value}
+                                </div>
+                              </div>
+                            )
+                          ))}
+                  </div>
+
+                  <div className="mt-8 p-6 bg-emerald-50 rounded-xl">
+                    <h3 className="text-lg font-semibold text-emerald-800 mb-2">
+                      {t("qualityCertification")}
+                    </h3>
+                    <p className="text-emerald-700">
+                      {t("qualityCertificationText")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Insurance & Certification Section */}
           <section className="py-16 bg-gray-50">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -985,7 +1082,7 @@ const ProductPage: React.FC = () => {
                     <div className="space-y-4">
                       <div>
                         <span className="font-medium text-gray-700">
-                          Hilfsmittel Number:
+                          {t("e3hand.insurance.numberLabel")}
                         </span>
                         <span className="ml-2 text-emerald-600 font-mono">
                           {t("e3hand.insurance.number")}
@@ -993,7 +1090,7 @@ const ProductPage: React.FC = () => {
                       </div>
                       <div>
                         <span className="font-medium text-gray-700">
-                          Product Designation:
+                          {t("e3hand.insurance.productLabel")}
                         </span>
                         <span className="ml-2">
                           {t("e3hand.insurance.product")}
@@ -1471,6 +1568,72 @@ const ProductPage: React.FC = () => {
               </div>
             </div>
           </section>
+
+          {/* Insurance & Certification Section */}
+          <section className="py-16 bg-gray-50">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div
+                className={`transition-all duration-1000 delay-1100 ease-out ${
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
+                }`}
+              >
+                <h2 className="text-3xl font-bold text-gray-900 mb-8">
+                  {t("bhand.insurance.title")}
+                </h2>
+                <div className="grid lg:grid-cols-2 gap-8">
+                  <div className="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                      {t("bhand.insurance.recognizedDevice")}
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <span className="font-medium text-gray-700">
+                          {t("bhand.insurance.numberLabel")}
+                        </span>
+                        <span className="ml-2 text-emerald-600 font-mono">
+                          {t("bhand.insurance.number")}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-700">
+                          {t("bhand.insurance.productLabel")}
+                        </span>
+                        <span className="ml-2">
+                          {t("bhand.insurance.product")}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-700">
+                          Certification:
+                        </span>
+                        <span className="ml-2">
+                          {t("bhand.insurance.certification")}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                      {t("bhand.funding.title")}
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      {t("bhand.funding.description")}
+                    </p>
+                    <div className="space-y-2 text-sm text-gray-600">
+                      <div>• {t("bhand.funding.health")}</div>
+                      <div>• {t("bhand.funding.accident")}</div>
+                      <div>• {t("bhand.funding.pension")}</div>
+                      <div>• {t("bhand.funding.employment")}</div>
+                      <div>• {t("bhand.funding.integration")}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </>
       )}
 
@@ -1496,18 +1659,19 @@ const ProductPage: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
+                onClick={handleContactScroll}
                 className={`bg-gradient-to-r ${product.color} text-white px-8 py-4 rounded-lg font-semibold hover:scale-105 transition-all duration-300`}
               >
                 {product.requiresConsultation
                   ? t("bookConsultation")
                   : t("getQuote")}
               </button>
-              <Link
-                to="/"
+              <button
+                onClick={handleBackToProducts}
                 className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-4 rounded-lg font-semibold transition-colors duration-200"
               >
                 {t("viewAllProducts")}
-              </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -46,7 +46,7 @@ const ProductsSection: React.FC = () => {
       name: t("products.bhand.name"),
       description: t("products.bhand.desc"),
       image: getAssetPath("/BHand1.jpg"),
-      color: "from-emerald-500 to-emerald-600",
+      color: "from-emerald-400 via-emerald-500 to-emerald-700",
     },
     {
       id: "t-brush",

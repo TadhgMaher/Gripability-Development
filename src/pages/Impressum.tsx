@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -6,6 +6,10 @@ import { useLanguage } from "../contexts/LanguageContext";
 const Impressum: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleBackToHome = () => {
     navigate("/");
@@ -95,7 +99,7 @@ const Impressum: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
                 {t("impressum.webdesign")}
               </h3>
-              <p className="text-gray-700">jegumedia, Bremen</p>
+              <p className="text-gray-700">Tadhg Maher</p>
             </section>
 
             {/* Disclaimer */}

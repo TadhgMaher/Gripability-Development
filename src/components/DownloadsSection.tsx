@@ -29,22 +29,22 @@ const DownloadsSection: React.FC = () => {
     {
       name: t("products.e3hand.name"),
       id: "e3-hand",
-      color: "from-emerald-500 to-emerald-600",
+      color: "from-emerald-400 via-emerald-500 to-emerald-700",
     },
     {
       name: t("products.xhand.name"),
       id: "x-hand",
-      color: "from-emerald-500 to-emerald-600",
+      color: "from-emerald-400 via-emerald-500 to-emerald-700",
     },
     {
       name: t("products.bhand.name"),
       id: "b-hand",
-      color: "from-emerald-500 to-emerald-600",
+      color: "from-emerald-400 via-emerald-500 to-emerald-700",
     },
     {
       name: t("products.tbrush.name"),
       id: "t-brush",
-      color: "from-emerald-500 to-emerald-600",
+      color: "from-emerald-400 via-emerald-500 to-emerald-700",
     },
   ];
 
@@ -54,7 +54,7 @@ const DownloadsSection: React.FC = () => {
       "x-hand": "Gripability_x_hand.pdf",
       "t-brush": "Gripability_t_brush.pdf",
       "e3-hand": "Gripability_e_hand.pdf",
-      "b-hand": "Gripability_b_hand-.pdf",
+      "b-hand": "Gripability_b_hand.pdf",
     };
 
     const pdfFileName = pdfMap[productId];

@@ -1,31 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { getAssetPath } from "../utils/assets";
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
   useEffect(() => {
     setIsVisible(true);
-
-    // Add scroll listener to hide the scroll indicator
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setShowScrollIndicator(false);
-      } else {
-        setShowScrollIndicator(true);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
 
   const scrollToProducts = () => {
@@ -57,7 +40,7 @@ const HeroSection: React.FC = () => {
           backgroundAttachment: "fixed",
         }}
       >
-        <div className="absolute inset-0 bg-white/85"></div>
+        <div className="absolute inset-0 bg-white/65"></div>
       </div>
 
       {/* Content */}
@@ -67,18 +50,19 @@ const HeroSection: React.FC = () => {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          {/* Logo Animation */}
+          {/* Font-based Logo */}
           <div
             className={`mb-8 transition-all duration-1200 delay-300 ${
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
-            <div className="w-20 h-20 mx-auto rounded-2xl overflow-hidden shadow-lg">
-              <img
-                src={getAssetPath("/Logo.jpg")}
-                alt="GripAbility Logo"
-                className="w-full h-full object-cover"
-              />
+            <div className="text-center">
+              <span className="text-6xl md:text-7xl font-bold">
+                <span className="text-red-600">GRIP</span>
+                <span className="text-transparent bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text">
+                  ABILITY
+                </span>
+              </span>
             </div>
           </div>
 
@@ -114,35 +98,19 @@ const HeroSection: React.FC = () => {
           >
             <button
               onClick={scrollToProducts}
-              className="group bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center space-x-2"
+              className="group bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center space-x-2"
             >
               <span>{t("hero.cta1")}</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+              <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform duration-200" />
             </button>
             <button
               onClick={scrollToConsultation}
-              className="group bg-white hover:bg-gray-50 text-emerald-600 px-8 py-4 rounded-lg font-semibold text-lg border-2 border-emerald-600 transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center space-x-2"
+              className="group bg-white hover:bg-gray-50 text-emerald-600 px-8 py-4 rounded-lg font-semibold text-lg border-2 border-emerald-600 hover:border-emerald-700 transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center space-x-2"
             >
               <span>{t("hero.cta2")}</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+              <ArrowRight className="w-5 h-5 text-emerald-600 group-hover:translate-x-1 transition-transform duration-200" />
             </button>
           </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div
-          className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-all duration-500 ${
-            isVisible && showScrollIndicator
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-4 pointer-events-none"
-          }`}
-        >
-          <button
-            onClick={scrollToProducts}
-            className="animate-bounce p-2 rounded-full bg-white/80 hover:bg-white shadow-lg transition-colors duration-200"
-          >
-            <ChevronDown className="w-6 h-6 text-emerald-600" />
-          </button>
         </div>
       </div>
     </section>

@@ -52,7 +52,7 @@ const translations: LanguageTranslations = {
     "products.tbrush.name": "t.brush",
     "products.tbrush.desc":
       "A toothbrush adapter for people with reduced grip strength. Lightweight. Easy to use.",
-    "products.e3hand.name": "e.hand",
+    "products.e3hand.name": "e-hand (e3)",
     "products.e3hand.desc":
       "A pneumatic-powered automatic gripping system for home, school, and work—customizable for hand, head, or alternative use points.",
     "products.bhand.name": "b.hand",
@@ -296,6 +296,27 @@ const translations: LanguageTranslations = {
     "bhand.benefits.immediate.title": "Immediate Benefit",
     "bhand.benefits.immediate.description":
       "Immediate disability compensation without compromises in effort and benefit.",
+
+    // B-Hand Insurance & Certification
+    "bhand.insurance.title": "Insurance Coverage & Certification",
+    "bhand.insurance.recognizedDevice": "Recognized Medical Device",
+    "bhand.insurance.numberLabel": "Hilfsmittel Number:",
+    "bhand.insurance.number": "02.40.04.4002",
+    "bhand.insurance.productLabel": "Product Designation:",
+    "bhand.insurance.product": "Gripability b-hand",
+    "bhand.insurance.certification":
+      "Gripability products comply with all requirements of the EU Medical Device Directive 93/42/EEC and are CE certified.",
+
+    // B-Hand Funding Options
+    "bhand.funding.title": "Funding Options",
+    "bhand.funding.description":
+      "As an everyday aid and with appropriate indication, Gripability b-hand is prescribed by a doctor and financed by the responsible benefit provider.",
+    "bhand.funding.health": "Health insurance (daily living)",
+    "bhand.funding.accident": "Accident insurance (workplace/education)",
+    "bhand.funding.pension": "Pension insurance",
+    "bhand.funding.employment": "Employment agency",
+    "bhand.funding.integration": "Integration office",
+
     "product.tbrush.longDescription":
       "Daily tooth cleaning is an important part of personal hygiene. Toothbrush and brushing technique play a crucial role. With t.brush, you always have your electric toothbrush firmly under control. A grip bracket ensures that the toothbrush sits stable in your hand. And so you can reach everywhere with the brush head, you can rotate the handle around the toothbrush.",
 
@@ -454,10 +475,47 @@ const translations: LanguageTranslations = {
     "e3hand.adaptation.control":
       "Various buttons and sensors can be placed in the foot, head or hand area to control the gripper. Controls via muscle or voice sensors are also easily realizable.",
 
+    // E3 Hand Technical Specifications
+    "e3hand.technicalSpecs": "Technical Specifications",
+    "e3hand.specs.grippingOperations": "Gripping Operations",
+    "e3hand.specs.grippingOperations.value": "200-400 per charge",
+    "e3hand.specs.grippingForces": "Gripping Forces",
+    "e3hand.specs.grippingForces.value":
+      "3 adjustable levels (mini/medium/maxi)",
+    "e3hand.specs.grippingForceRange": "Gripping Force Range",
+    "e3hand.specs.grippingForceRange.value": "1-15 N adjustable",
+    "e3hand.specs.batteryLife": "Battery Life",
+    "e3hand.specs.batteryLife.value": "8-12 hours operation",
+    "e3hand.specs.chargingTime": "Charging Time",
+    "e3hand.specs.chargingTime.value": "2-3 hours full charge",
+    "e3hand.specs.weight": "Weight (Backpack)",
+    "e3hand.specs.weight.value": "1.2 kg (backpack module)",
+    "e3hand.specs.gripperWeight": "Gripper Weight",
+    "e3hand.specs.gripperWeight.value": "180g (gripper module)",
+    "e3hand.specs.workingPressure": "Working Pressure",
+    "e3hand.specs.workingPressure.value": "2-6 bar",
+    "e3hand.specs.powerSource": "Power Source",
+    "e3hand.specs.powerSource.value": "Pneumatic with mobile compressor",
+    "e3hand.specs.control": "Control System",
+    "e3hand.specs.control.value": "Touch-sensitive symbols",
+    "e3hand.specs.connectivity": "Connectivity",
+    "e3hand.specs.connectivity.value": "Wireless control interface",
+    "e3hand.specs.adaptations": "Adaptations",
+    "e3hand.specs.adaptations.value": "Hand, head, or custom body positions",
+    "e3hand.specs.operatingTemp": "Operating Temperature",
+    "e3hand.specs.operatingTemp.value": "-10°C to +40°C",
+    "e3hand.specs.certification": "Certification",
+    "e3hand.specs.certification.value":
+      "CE certified, EU Medical Device Directive 93/42/EEC",
+    "e3hand.specs.hilfsmittelNumber": "Hilfsmittel Number",
+    "e3hand.specs.hilfsmittelNumber.value": "02.40.04.4001",
+
     // E3 Hand Insurance & Certification
     "e3hand.insurance.title": "Insurance Coverage & Certification",
     "e3hand.insurance.recognizedDevice": "Recognized Medical Device",
+    "e3hand.insurance.numberLabel": "Hilfsmittel Number:",
     "e3hand.insurance.number": "02.40.04.4001",
+    "e3hand.insurance.productLabel": "Product Designation:",
     "e3hand.insurance.product": "Gripability e-hand - Series I",
     "e3hand.insurance.description":
       "Gripability e-hand is a recognized medical aid and is listed in the medical aid directory of statutory health insurance companies according to § 128 SGB V.",
@@ -584,6 +642,27 @@ const translations: LanguageTranslations = {
     "bhand.benefits.immediate.title": "Sofortiger Nutzen",
     "bhand.benefits.immediate.description":
       "Unmittelbarer Behinderungsausgleich ohne Kompromisse bei Aufwand und Nutzen.",
+
+    // B-Hand Insurance & Certification
+    "bhand.insurance.title": "Hilfsmittelnummer & Zertifizierung",
+    "bhand.insurance.recognizedDevice": "Anerkanntes Medizinprodukt",
+    "bhand.insurance.numberLabel": "Hilfsmittelnummer:",
+    "bhand.insurance.number": "02.40.04.4002",
+    "bhand.insurance.productLabel": "Produktbezeichnung:",
+    "bhand.insurance.product": "Gripability b-hand",
+    "bhand.insurance.certification":
+      "Gripability Produkte entsprechen allen Anforderungen der EU-Medizinprodukte-Richtlinie 93/42/EWG und sind CE-zertifiziert.",
+
+    // B-Hand Funding Options
+    "bhand.funding.title": "Finanzierungsmöglichkeiten",
+    "bhand.funding.description":
+      "Als Alltagshilfe und bei entsprechender Indikation wird Gripability b-hand vom Arzt verordnet und vom zuständigen Leistungsträger finanziert.",
+    "bhand.funding.health": "Krankenversicherung (Alltag)",
+    "bhand.funding.accident": "Unfallversicherung (Arbeitsplatz/Ausbildung)",
+    "bhand.funding.pension": "Rentenversicherung",
+    "bhand.funding.employment": "Arbeitsagentur",
+    "bhand.funding.integration": "Integrationsamt",
+
     "product.tbrush.longDescription":
       "Das Reinigen der Zähne ist ein wichtiger Bestandteil der täglichen Körperhygiene. Zahnbürste und Putztechnik spielen dabei eine entscheidende Rolle. Mit t.brush haben Sie Ihre elektrische Zahnbürste immer fest im Griff. Ein Griffbügel stellt sicher, dass die Zahnbürste stabil in Ihrer Hand sitzt. Und damit Sie mit dem Bürstenkopf auch überall hinkommen, können Sie den Griff um die Zahnbürste drehen.",
 
@@ -814,10 +893,48 @@ const translations: LanguageTranslations = {
     "e3hand.adaptation.control":
       "Zur Steuerung des Greifers können verschiedenste Taster und Sensoren im Fuß-, Kopf- oder Handbereich platziert werden. Außerdem sind auch Steuerungen über Muskel- oder Sprachsensoren ganz einfach realisierbar.",
 
+    // E3 Hand Technical Specifications
+    "e3hand.technicalSpecs": "Technische Spezifikationen",
+    "e3hand.specs.grippingOperations": "Greifvorgänge",
+    "e3hand.specs.grippingOperations.value": "200-400 pro Ladung",
+    "e3hand.specs.grippingForces": "Greifkräfte",
+    "e3hand.specs.grippingForces.value":
+      "3 einstellbare Stufen (mini/medium/maxi)",
+    "e3hand.specs.grippingForceRange": "Greifkraft-Bereich",
+    "e3hand.specs.grippingForceRange.value": "1-15 N einstellbar",
+    "e3hand.specs.batteryLife": "Akkulaufzeit",
+    "e3hand.specs.batteryLife.value": "8-12 Stunden Betrieb",
+    "e3hand.specs.chargingTime": "Ladezeit",
+    "e3hand.specs.chargingTime.value": "2-3 Stunden vollständige Ladung",
+    "e3hand.specs.weight": "Gewicht (Rucksack)",
+    "e3hand.specs.weight.value": "1,2 kg (Rucksackmodul)",
+    "e3hand.specs.gripperWeight": "Greifergewicht",
+    "e3hand.specs.gripperWeight.value": "180g (Greifermodul)",
+    "e3hand.specs.workingPressure": "Arbeitsdruck",
+    "e3hand.specs.workingPressure.value": "2-6 bar",
+    "e3hand.specs.powerSource": "Energiequelle",
+    "e3hand.specs.powerSource.value": "Pneumatisch mit mobilem Kompressor",
+    "e3hand.specs.control": "Steuerungssystem",
+    "e3hand.specs.control.value": "Berührungsempfindliche Symbole",
+    "e3hand.specs.connectivity": "Konnektivität",
+    "e3hand.specs.connectivity.value": "Drahtlose Steuerungsschnittstelle",
+    "e3hand.specs.adaptations": "Anpassungen",
+    "e3hand.specs.adaptations.value":
+      "Hand-, Kopf- oder individuelle Körperpositionen",
+    "e3hand.specs.operatingTemp": "Betriebstemperatur",
+    "e3hand.specs.operatingTemp.value": "-10°C bis +40°C",
+    "e3hand.specs.certification": "Zertifizierung",
+    "e3hand.specs.certification.value":
+      "CE-zertifiziert, EU-Medizinprodukte-Richtlinie 93/42/EWG",
+    "e3hand.specs.hilfsmittelNumber": "Hilfsmittelnummer",
+    "e3hand.specs.hilfsmittelNumber.value": "02.40.04.4001",
+
     // E3 Hand Insurance & Certification
     "e3hand.insurance.title": "Hilfsmittelnummer & Zertifizierung",
     "e3hand.insurance.recognizedDevice": "Anerkanntes Medizinprodukt",
+    "e3hand.insurance.numberLabel": "Hilfsmittelnummer:",
     "e3hand.insurance.number": "02.40.04.4001",
+    "e3hand.insurance.productLabel": "Produktbezeichnung:",
     "e3hand.insurance.product": "Gripability e-hand - Serie I",
     "e3hand.insurance.description":
       "Gripability e-hand ist ein anerkanntes Hilfsmittel und im Hilfsmittelverzeichnis der gesetzlichen Krankenkassen nach § 128 SGB V unter folgender Positionsnummer gelistet.",
@@ -900,7 +1017,7 @@ const translations: LanguageTranslations = {
     "hero.subheadline":
       "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung",
     "hero.cta1": "Unsere Produkte erkunden",
-    "hero.cta2": "Telefonische Beratung vereinbaren",
+    "hero.cta2": "Beratung vereinbaren",
 
     // About
     "about.headline":
@@ -913,7 +1030,7 @@ const translations: LanguageTranslations = {
     // Products
     "products.headline":
       "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung",
-    "products.e3hand.name": "e.hand",
+    "products.e3hand.name": "e-hand (e3)",
     "products.e3hand.desc":
       "Das automatische Greifsystem für mehr Aktivität und Selbstständigkeit in Alltag, Beruf und Freizeit",
     "products.xhand.name": "x.hand",

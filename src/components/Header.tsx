@@ -46,21 +46,16 @@ const Header: React.FC = () => {
     <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {/* Text Logo moved to left */}
           <div
             onClick={handleLogoClick}
             className="flex items-center space-x-3 group cursor-pointer"
           >
-            <div className="w-12 h-12 rounded-lg overflow-hidden group-hover:scale-105 transition-transform duration-200">
-              <img
-                src={getAssetPath("/Logo.jpg")}
-                alt="GripAbility Logo"
-                className="w-full h-full object-cover"
-              />
-            </div>
             <span className="text-2xl font-bold">
               <span className="text-red-600">GRIP</span>
-              <span className="text-emerald-600">ABILITY</span>
+              <span className="text-transparent bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text">
+                ABILITY
+              </span>
             </span>
           </div>
 
@@ -92,7 +87,7 @@ const Header: React.FC = () => {
             </button>
           </nav>
 
-          {/* Language Switcher & Mobile Menu */}
+          {/* Language Switcher & Logo & Mobile Menu */}
           <div className="flex items-center space-x-4">
             <button
               onClick={toggleLanguage}
@@ -103,6 +98,15 @@ const Header: React.FC = () => {
                 {language === "en" ? "Deutsch" : "English"}
               </span>
             </button>
+
+            {/* Logo Image */}
+            <div className="w-10 h-10 rounded-lg overflow-hidden">
+              <img
+                src={getAssetPath("/Logo.jpg")}
+                alt="Gripability Logo"
+                className="w-full h-full object-cover"
+              />
+            </div>
 
             {/* Mobile menu button */}
             <button
