@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
-import { getAssetPath } from "../utils/assets";
 
 const Footer: React.FC = () => {
   const { t } = useLanguage();
@@ -36,11 +35,6 @@ const Footer: React.FC = () => {
           {/* Logo & Description */}
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <img
-                src={getAssetPath("/Logo.jpg")}
-                alt="Gripability Logo"
-                className="w-10 h-10 rounded-lg object-contain"
-              />
               <span className="text-xl font-bold">Gripability</span>
             </div>
             <p className="text-gray-400 leading-relaxed mb-6">

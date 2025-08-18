@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
-import { getAssetPath } from "../utils/assets";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,9 +51,9 @@ const Header: React.FC = () => {
             className="flex items-center space-x-3 group cursor-pointer"
           >
             <span className="text-2xl font-bold">
-              <span className="text-red-600">GRIP</span>
+              <span className="text-red-600">Grip</span>
               <span className="text-transparent bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text">
-                ABILITY
+                ability
               </span>
             </span>
           </div>
@@ -98,15 +97,6 @@ const Header: React.FC = () => {
                 {language === "en" ? "Deutsch" : "English"}
               </span>
             </button>
-
-            {/* Logo Image */}
-            <div className="w-10 h-10 rounded-lg overflow-hidden">
-              <img
-                src={getAssetPath("/Logo.jpg")}
-                alt="Gripability Logo"
-                className="w-full h-full object-cover"
-              />
-            </div>
 
             {/* Mobile menu button */}
             <button

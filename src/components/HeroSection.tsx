@@ -58,9 +58,9 @@ const HeroSection: React.FC = () => {
           >
             <div className="text-center">
               <span className="text-6xl md:text-7xl font-bold">
-                <span className="text-red-600">GRIP</span>
+                <span className="text-red-600">Grip</span>
                 <span className="text-transparent bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text">
-                  ABILITY
+                  ability
                 </span>
               </span>
             </div>

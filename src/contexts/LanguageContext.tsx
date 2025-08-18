@@ -52,7 +52,7 @@ const translations: LanguageTranslations = {
     "products.tbrush.name": "t.brush",
     "products.tbrush.desc":
       "A toothbrush adapter for people with reduced grip strength. Lightweight. Easy to use.",
-    "products.e3hand.name": "e-hand (e3)",
+    "products.e3hand.name": "e.hand (e3)",
     "products.e3hand.desc":
       "A pneumatic-powered automatic gripping system for home, school, and work—customizable for hand, head, or alternative use points.",
     "products.bhand.name": "b.hand",
@@ -1030,7 +1030,7 @@ const translations: LanguageTranslations = {
     // Products
     "products.headline":
       "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung",
-    "products.e3hand.name": "e-hand (e3)",
+    "products.e3hand.name": "e.hand (e3)",
     "products.e3hand.desc":
       "Das automatische Greifsystem für mehr Aktivität und Selbstständigkeit in Alltag, Beruf und Freizeit",
     "products.xhand.name": "x.hand",
