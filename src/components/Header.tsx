@@ -45,17 +45,17 @@ const Header: React.FC = () => {
     <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Text Logo moved to left */}
-          <div
-            onClick={handleLogoClick}
-            className="flex items-center space-x-3 group cursor-pointer"
-          >
-            <span className="text-2xl font-bold">
-              <span className="text-red-600">Grip</span>
-              <span className="text-transparent bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text">
-                ability
+          {/* Language Switcher moved to left */}
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center space-x-1 px-3 py-1 rounded-md bg-emerald-50 hover:bg-emerald-100 transition-colors duration-200"
+            >
+              <span className="text-lg">{language === "en" ? "" : ""}</span>
+              <span className="text-sm font-medium text-emerald-700">
+                {language === "en" ? "Deutsch" : "English"}
               </span>
-            </span>
+            </button>
           </div>
 
           {/* Desktop Navigation */}
@@ -86,17 +86,19 @@ const Header: React.FC = () => {
             </button>
           </nav>
 
-          {/* Language Switcher & Logo & Mobile Menu */}
+          {/* Text Logo & Mobile Menu moved to right */}
           <div className="flex items-center space-x-4">
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center space-x-1 px-3 py-1 rounded-md bg-emerald-50 hover:bg-emerald-100 transition-colors duration-200"
+            <div
+              onClick={handleLogoClick}
+              className="flex items-center space-x-3 group cursor-pointer"
             >
-              <span className="text-lg">{language === "en" ? "" : ""}</span>
-              <span className="text-sm font-medium text-emerald-700">
-                {language === "en" ? "Deutsch" : "English"}
+              <span className="text-2xl font-bold">
+                <span className="text-red-600">Grip</span>
+                <span className="text-transparent bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text">
+                  ability
+                </span>
               </span>
-            </button>
+            </div>
 
             {/* Mobile menu button */}
             <button

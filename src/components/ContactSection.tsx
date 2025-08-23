@@ -13,7 +13,26 @@ const ContactSection: React.FC = () => {
     country: "",
     message: "",
   });
+  const [verificationAnswer, setVerificationAnswer] = useState("");
+  const [verificationError, setVerificationError] = useState(false);
+  const [mathProblem, setMathProblem] = useState({
+    num1: 0,
+    num2: 0,
+    answer: 0,
+  });
   const sectionRef = useRef<HTMLElement>(null);
+
+  // Generate a new math problem
+  const generateMathProblem = () => {
+    const num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+    const num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+    const answer = num1 + num2;
+    setMathProblem({ num1, num2, answer });
+  };
+
+  useEffect(() => {
+    generateMathProblem();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -35,6 +54,16 @@ const ContactSection: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Check verification answer
+    const userAnswer = parseInt(verificationAnswer);
+    if (userAnswer !== mathProblem.answer) {
+      setVerificationError(true);
+      return;
+    }
+
+    // Clear any previous verification errors
+    setVerificationError(false);
+
     // Create mailto URL with form data
     const subject = encodeURIComponent(
       "Consultation Request from " + formData.name
@@ -54,6 +83,9 @@ const ContactSection: React.FC = () => {
     setTimeout(() => {
       setIsSubmitted(false);
       setFormData({ name: "", email: "", country: "", message: "" });
+      setVerificationAnswer("");
+      setVerificationError(false);
+      generateMathProblem(); // Generate new math problem for next time
     }, 3000);
   };
 
@@ -61,6 +93,15 @@ const ContactSection: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value, type } = e.target;
+
+    if (name === "verification") {
+      setVerificationAnswer(value);
+      if (verificationError) {
+        setVerificationError(false); // Clear error when user starts typing
+      }
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]:
@@ -238,6 +279,40 @@ const ContactSection: React.FC = () => {
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200 resize-none"
                     />
+                  </div>
+
+                  {/* Anti-spam verification */}
+                  <div>
+                    <label
+                      htmlFor="verification"
+                      className="block text-sm font-semibold text-gray-700 mb-2"
+                    >
+                      {t("contact.verification")}
+                    </label>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-lg font-medium text-gray-700">
+                        {mathProblem.num1} + {mathProblem.num2} =
+                      </span>
+                      <input
+                        type="number"
+                        id="verification"
+                        name="verification"
+                        value={verificationAnswer}
+                        onChange={handleChange}
+                        required
+                        className={`w-20 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 transition-colors duration-200 ${
+                          verificationError
+                            ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                            : "border-gray-300 focus:border-emerald-500"
+                        }`}
+                        placeholder="?"
+                      />
+                    </div>
+                    {verificationError && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {t("contact.verificationError")}
+                      </p>
+                    )}
                   </div>
 
                   <button

@@ -722,9 +722,10 @@ const ProductPage: React.FC = () => {
                             className="border border-gray-200 rounded-lg p-4"
                           >
                             <div className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
-                              {key
-                                .replace(/([A-Z])/g, " $1")
-                                .replace(/^./, (str) => str.toUpperCase())}
+                              {t(key) ||
+                                key
+                                  .replace(/([A-Z])/g, " $1")
+                                  .replace(/^./, (str) => str.toUpperCase())}
                             </div>
                             <div className="text-lg font-semibold text-gray-900">
                               {value}

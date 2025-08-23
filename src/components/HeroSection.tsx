@@ -4,7 +4,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { getAssetPath } from "../utils/assets";
 
 const HeroSection: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, content } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -25,6 +25,9 @@ const HeroSection: React.FC = () => {
     }
   };
 
+  // Get background image from CMS or fallback to default
+  const backgroundImage = content?.hero?.background_image || "/herobg.jpg";
+
   return (
     <section
       id="home"
@@ -34,7 +37,7 @@ const HeroSection: React.FC = () => {
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `url(${getAssetPath("/herobg.jpg")})`,
+          backgroundImage: `url(${getAssetPath(backgroundImage)})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
@@ -66,7 +69,7 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Headline */}
+          {/* Headline - now using CMS content */}
           <h1
             className={`text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight transition-all duration-1000 delay-500 ${
               isVisible
@@ -77,13 +80,14 @@ const HeroSection: React.FC = () => {
             {t("hero.headline")}
           </h1>
 
-          {/* Subheadline */}
+          {/* Subheadline - now using CMS content */}
           <p
             className={`text-lg md:text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-700 ${
               isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-4"
             }`}
+            style={{ whiteSpace: "pre-line" }}
           >
             {t("hero.subheadline")}
           </p>

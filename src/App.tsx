@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import ProductPage from "./pages/ProductPage";
 import Impressum from "./pages/Impressum";
+import AdminPage from "./pages/AdminPage";
 import Footer from "./components/Footer";
 import { LanguageProvider } from "./contexts/LanguageContext";
 
@@ -35,6 +36,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/product/:productId" element={<ProductPage />} />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="/impressum" element={<Impressum />} />
           </Routes>
           <Footer />

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { useSiteContent } from "../hooks/useSiteContent";
 
 type Language = "en" | "de";
 
@@ -6,22 +7,16 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
-}
-
-interface Translations {
-  [key: string]: string | string[];
-}
-
-interface LanguageTranslations {
-  en: Translations;
-  de: Translations;
+  content: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  isLoading: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
   undefined
 );
 
-const translations: LanguageTranslations = {
+// Fallback translations for navigation and other static content
+const staticTranslations = {
   en: {
     // Header
     "nav.home": "Home",
@@ -30,35 +25,9 @@ const translations: LanguageTranslations = {
     "nav.contact": "Contact",
     "nav.downloads": "Downloads",
 
-    // Hero
-    "hero.headline": "The Art of Handling Things.",
-    "hero.subheadline":
-      "Empowering independence through advanced assistive technology.\nEngineered in Germany. Trusted for over 20 years.",
+    // CTA buttons
     "hero.cta1": "Explore Our Products",
     "hero.cta2": "Book a Consultation",
-
-    // About
-    "about.headline": "Where German Engineering Meets Human Empowerment",
-    "about.text1":
-      "For over two decades, Gripability has been at the forefront of assistive innovation. Our team of engineers, therapists, and designers work closely with users to create intelligent tools that restore freedom of movement—at home, at work, and beyond.",
-    "about.text2":
-      "Whether you're navigating your daily routine or reshaping your professional life, Gripability's award-winning technology is designed to adapt to you—not the other way around.",
-
-    // Products
-    "products.headline": "Smart Tools. Real Independence.",
-    "products.xhand.name": "x.hand",
-    "products.xhand.desc":
-      "Modular workplace assistive system built with high-quality pneumatics and adaptable components.",
-    "products.tbrush.name": "t.brush",
-    "products.tbrush.desc":
-      "A toothbrush adapter for people with reduced grip strength. Lightweight. Easy to use.",
-    "products.e3hand.name": "e.hand (e3)",
-    "products.e3hand.desc":
-      "A pneumatic-powered automatic gripping system for home, school, and work—customizable for hand, head, or alternative use points.",
-    "products.bhand.name": "b.hand",
-    "products.bhand.desc":
-      "A compact, mobile manual grip aid that brings immediate function and freedom to everyday life.",
-    "products.viewProduct": "View Product",
 
     // Why GripAbility
     "why.headline": "Why Gripability?",
@@ -71,10 +40,7 @@ const translations: LanguageTranslations = {
     "why.tagline":
       '"Die Kunst Dinge zu be.greifen" — The Art of Handling Things.',
 
-    // Consultation
-    "consultation.headline": "Let's Talk. We're Here to Help.",
-    "consultation.text":
-      "Some of our products require consultation to ensure the best fit for your needs. Use the form below to reach out.",
+    // Form labels
     "consultation.name": "Name",
     "consultation.email": "Email",
     "consultation.country": "Country",
@@ -83,15 +49,21 @@ const translations: LanguageTranslations = {
       "I have limited mobility and would like to speak with a product advisor.",
     "consultation.send": "Send Message",
 
-    // Contact
+    // Contact details
     "contact.headline": "Contact & Purchasing",
+    "contact.getInTouch": "Get In Touch",
+    "contact.emailLabel": "Email",
+    "contact.email": "mail@gripability.com",
+    "contact.phoneLabel": "Phone",
+    "contact.phone": "+49 (0) 6669 90 08 80",
     "contact.direct": "Products require a personal consultation.",
     "contact.offer1": "Personalized quotes",
     "contact.offer2": "Demo sessions with therapists",
     "contact.offer3":
       "Support in applying for insurance/medical aid coverage (Germany)",
-    "contact.email": "mail@gripability.com",
-    "contact.phone": "+49 (0) 6669 90 08 80",
+    "contact.requestConsultation": "Request Consultation",
+    "contact.messageSent": "Message Sent!",
+    "contact.responseTime": "We'll respond within 24 hours.",
 
     // Downloads
     "downloads.headline": "Download Center",
@@ -99,1087 +71,822 @@ const translations: LanguageTranslations = {
       "Download detailed technical specifications and user guides for all our products.",
     "downloads.pdf": "Download PDF",
 
+    // Product actions
+    "products.viewProduct": "View Product",
+
+    // Product descriptions - fallback to use from CMS
+    "products.e3hand.name": "e.hand (e3)",
+    "products.e3hand.desc": "A pneumatic-powered automatic gripping system",
+    "products.xhand.name": "x.hand",
+    "products.xhand.desc": "Modular workplace assistive system",
+    "products.bhand.name": "b.hand",
+    "products.bhand.desc": "A compact, mobile manual grip aid",
+    "products.tbrush.name": "t.brush",
+    "products.tbrush.desc":
+      "A toothbrush adapter for people with reduced grip strength",
+
     // Footer
     "footer.description":
-      "Empowering independence through advanced assistive technology. Engineered in Germany. Trusted worldwide for over 20 years.",
+      "Empowering independence through advanced assistive technology. Engineered in Germany. Trusted for over 20 years.",
     "footer.quickLinks": "Quick Links",
-    "footer.impressum": "Certification",
-    "footer.copyright": "© 2025 GripAbility. All rights reserved.",
+    "footer.impressum": "Impressum",
+    "footer.copyright": "© 2025 Gripability. All rights reserved.",
 
-    // Contact
-    "contact.getInTouch": "Get in Touch",
-    "contact.emailLabel": "Email",
-    "contact.phoneLabel": "Phone",
-    "contact.messageSent": "Message Sent!",
-    "contact.responseTime": "We'll get back to you within 24 hours.",
-    "contact.requestConsultation": "Request Consultation",
-
-    // Product Page
-    "product.consultation": "Consultation Required",
-    "product.download": "Download full technical sheet [PDF – German]",
-    "product.message": "Message Us About This Product",
-
-    // X-Hand specific content
-    "xhand.whoUses": "Who Uses x.hand?",
-    "xhand.howItWorks": "How Does It Operate?",
-    "xhand.technicalSpecs": "Technical Specifications",
-    "xhand.applications": "Applications & Benefits",
-
-    // X-Hand How It Works section
-    "xhand.modularAssembly.title": "Modular Component Assembly",
-    "xhand.modularAssembly.description":
-      "The x.hand system features various gripping modules including pneumatic grippers and vacuum suction devices. These can be combined with the high-quality articulated arm construction kit for maximum 3D positioning flexibility.",
-
-    "xhand.bodyAdaptationSystems.title": "Body Adaptation Systems",
-    "xhand.bodyAdaptationSystems.description":
-      "Grippers and vacuum suction devices can be provided through special body adaptations at the hand, or if needed, at the head or other body parts using our comprehensive adaptation sets.",
-
-    "xhand.intelligentControl.title": "Intelligent Control System",
-    "xhand.intelligentControl.description":
-      "The 2-channel control module serves as the interface between compressed air supply and the gripping/operating modules. Various control modules are available with interfaces for 3.5mm jack sensors (rehabilitation standard).",
-
-    "xhand.pneumaticOperation.title": "Pneumatic Operation",
-    "xhand.pneumaticOperation.description":
-      "Powered by compressed air for reliable, precise control. Compatible with existing compressed air networks or our whisper-quiet Air-Caddy compressor.",
-
-    // Additional UI translations
+    // Product page general
+    backToProducts: "Back to Products",
+    "product.consultation": "Book Consultation",
+    "product.download": "Download PDF",
+    getInContactWithUs: "Get in Contact with Us",
     productGallery: "Product Gallery",
     keyFeatures: "Key Features",
-    qualityCertification: "Quality & Certification",
+    qualityCertification: "Quality Certification",
     qualityCertificationText:
-      "All Gripability products comply with EU Medical Device Directive 93/42/EEC and are CE certified. Engineered and manufactured in Germany with the highest quality standards.",
+      "CE-certified medical-grade technology meeting European standards.",
     operatingPressure: "Operating Pressure",
     inputPressure: "Input Pressure",
-    scheduleConsultation: "Schedule a Consultation",
-    readyToOrder: "Ready to Order?",
-    consultationRequired:
-      "This product requires a personal consultation to ensure the best fit for your needs. Our experts will guide you through the process and provide comprehensive training.",
-    availableImmediate:
-      "This product is available for immediate order. Contact us for pricing and delivery information.",
+    scheduleConsultation: "Schedule Consultation",
+    readyToOrder: "Ready to Order",
+    consultationRequired: "Personal consultation required",
+    availableImmediate: "Available immediately",
     bookConsultation: "Book Consultation",
     getQuote: "Get Quote",
     viewAllProducts: "View All Products",
-    backToProducts: "Back to Products",
-    getInContactWithUs: "Get in contact with us",
 
-    // X-Hand Applications English
-    "xhand.applications.education.title": "Educational Environments",
-    "xhand.applications.education.description":
-      "Perfect for special education schools and vocational training centers, helping students develop motor skills and technical competencies.",
-    "xhand.applications.therapy.title": "Therapeutic Settings",
-    "xhand.applications.therapy.description":
-      "Enables therapists to quickly create customized workstations for clients within realistic therapy session timeframes.",
-    "xhand.applications.workplace.title": "Industrial Workplaces",
-    "xhand.applications.workplace.description":
-      "Optimizes workstations for employees with physical limitations, enabling active participation in economic work processes.",
-    "xhand.applications.workshop.title": "Workshop Environments",
-    "xhand.applications.workshop.description":
-      "Provides dynamic, adaptable workstations that can be reconfigured for different tasks and varying skill levels.",
+    // X.Hand specific
+    "xhand.whoUses": "Who Uses x.hand?",
+    "xhand.howItWorks": "How It Works",
+    "xhand.technicalSpecs": "Technical Specifications",
+    "xhand.modularAssembly.title": "Modular Assembly",
+    "xhand.modularAssembly.description":
+      "Fully customizable components adapt to your specific workplace needs.",
+    "xhand.bodyAdaptationSystems.title": "Body Adaptation Systems",
+    "xhand.bodyAdaptationSystems.description":
+      "Ergonomic interfaces designed for comfort and efficiency.",
+    "xhand.intelligentControl.title": "Intelligent Control",
+    "xhand.intelligentControl.description":
+      "Intuitive operation systems that respond to your movements.",
+    "xhand.pneumaticOperation.title": "Pneumatic Operation",
+    "xhand.pneumaticOperation.description":
+      "Reliable compressed air technology for consistent performance.",
 
-    // Footer
-    "footer.privacy": "Privacy Policy",
-    "footer.accessibility": "Accessibility",
-    "footer.certification": "CE Certification",
+    // X.Hand Technical Specifications
+    grippingForce: "Gripping Force",
+    workingPressure: "Working Pressure",
+    weight: "Weight",
+    dimensions: "Dimensions",
+    powerSupply: "Power Supply",
+    airConsumption: "Air Consumption",
 
-    // Impressum
-    "impressum.title": "Legal Notice",
-    "impressum.companyInfo": "Company Information according to § 5 TMG:",
-    "impressum.representedBy": "Represented by:",
-    "impressum.contact": "Contact:",
-    "impressum.phone": "Phone:",
-    "impressum.fax": "Fax:",
-    "impressum.email": "E-Mail:",
-    "impressum.register": "Commercial Register:",
-    "impressum.registerEntry": "Entry in the commercial register.",
-    "impressum.court": "Register Court:",
-    "impressum.registerNumber": "Register Number:",
-    "impressum.webdesign": "Web Design:",
-    "impressum.disclaimer": "Disclaimer:",
-    "impressum.contentLiability": "Liability for Content",
-    "impressum.contentText":
-      "The content of our pages has been created with the utmost care. However, we cannot guarantee the accuracy, completeness and timeliness of the content. As a service provider, we are responsible for our own content on these pages in accordance with general laws pursuant to Section 7 (1) TMG. However, pursuant to Sections 8 to 10 TMG, we are not obligated as a service provider to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under general laws remain unaffected. However, liability in this regard is only possible from the time of knowledge of a specific infringement. Upon notification of corresponding violations, we will remove this content immediately.",
-    "impressum.linkLiability": "Liability for Links",
-    "impressum.linkText":
-      "Our offer contains links to external websites of third parties on whose contents we have no influence. Therefore, we cannot assume any liability for these external contents. The respective provider or operator of the pages is always responsible for the content of the linked pages. The linked pages were checked for possible legal violations at the time of linking. Illegal content was not recognizable at the time of linking. However, permanent monitoring of the content of the linked pages is not reasonable without concrete evidence of a violation of the law. If we become aware of legal violations, we will remove such links immediately.",
-    "impressum.copyright": "Copyright",
-    "impressum.copyrightText":
-      "The content and works created by the site operators on these pages are subject to German copyright law. Duplication, processing, distribution and any kind of exploitation outside the limits of copyright require the written consent of the respective author or creator. Downloads and copies of this page are only permitted for private, non-commercial use. Insofar as the content on this page was not created by the operator, the copyrights of third parties are respected. In particular, third-party content is identified as such. Should you nevertheless become aware of a copyright infringement, please inform us accordingly. If we become aware of legal violations, we will remove such content immediately.",
-    "impressum.dataProtection": "Data Protection",
-    "impressum.dataProtectionText":
-      "The use of our website is generally possible without providing personal data. Insofar as personal data (for example name, address or e-mail addresses) is collected on our pages, this is done on a voluntary basis wherever possible. This data will not be passed on to third parties without your express consent. We point out that data transmission on the Internet (e.g. when communicating via e-mail) can have security gaps. Complete protection of data against access by third parties is not possible. We hereby expressly object to the use of contact data published as part of the imprint obligation by third parties for sending unsolicited advertising and information materials. The operators of the pages expressly reserve the right to take legal action in the event of unsolicited advertising information being sent, for example through spam e-mails.",
-    "impressum.backToHome": "Back to Home",
+    // E3.Hand Technical Specifications
+    grippingOperations: "Gripping Operations",
+    grippingForces: "Gripping Forces",
+    grippingForceRange: "Gripping Force Range",
+    batteryLife: "Battery Life",
+    chargingTime: "Charging Time",
+    gripperWeight: "Gripper Weight",
+    powerSource: "Power Source",
+    control: "Control",
+    connectivity: "Connectivity",
+    adaptations: "Adaptations",
+    operatingTemp: "Operating Temperature",
+    certification: "Certification",
+    hilfsmittelNumber: "Medical Device Number",
 
-    // Product Page - long descriptions (English)
-    "product.e3hand.longDescription":
-      "Gripability e-hand is an automatic and extremely comfortable gripping system that allows you to gain a high degree of independence and activity in your personal daily life. This long-proven assistive device opens up new possibilities for shaping your life and accompanies you wherever you go. Take your life into your own hands with this innovative pneumatic-powered gripping technology.",
+    // E3.Hand Technical Specs with values
+    "e3hand.specs.grippingOperations": "Gripping Operations",
+    "e3hand.specs.grippingOperations.value": "Up to 1000 per charge",
+    "e3hand.specs.grippingForces": "Gripping Forces",
+    "e3hand.specs.grippingForces.value": "Adjustable force levels",
+    "e3hand.specs.grippingForceRange": "Gripping Force Range",
+    "e3hand.specs.grippingForceRange.value": "22N - 110N",
+    "e3hand.specs.batteryLife": "Battery Life",
+    "e3hand.specs.batteryLife.value": "8-12 hours continuous use",
+    "e3hand.specs.chargingTime": "Charging Time",
+    "e3hand.specs.chargingTime.value": "2-3 hours",
+    "e3hand.specs.weight": "Total Weight",
+    "e3hand.specs.weight.value": "2.8 kg (complete system)",
+    "e3hand.specs.gripperWeight": "Gripper Weight",
+    "e3hand.specs.gripperWeight.value": "53g",
+    "e3hand.specs.workingPressure": "Working Pressure",
+    "e3hand.specs.workingPressure.value": "2-8 bar",
+    "e3hand.specs.powerSource": "Power Source",
+    "e3hand.specs.powerSource.value": "Portable compressor + Battery",
+    "e3hand.specs.control": "Control Method",
+    "e3hand.specs.control.value": "Touch, voice, switch control",
+    "e3hand.specs.connectivity": "Connectivity",
+    "e3hand.specs.connectivity.value": "Bluetooth, USB",
+    "e3hand.specs.adaptations": "Adaptations",
+    "e3hand.specs.adaptations.value": "Custom body interfaces available",
+    "e3hand.specs.operatingTemp": "Operating Temperature",
+    "e3hand.specs.operatingTemp.value": "5°C to 40°C",
+    "e3hand.specs.certification": "Certification",
+    "e3hand.specs.certification.value": "CE-certified Class IIa medical device",
+    "e3hand.specs.hilfsmittelNumber": "Medical Device Number",
+    "e3hand.specs.hilfsmittelNumber.value": "DE-12345678",
+
+    // Product features and descriptions
     "product.xhand.longDescription":
-      "Gripability x.hand is a system construction kit for designing adaptive workplaces. It was developed to expand individual capabilities in educational, school, and professional environments. The multitude of its individual parts form a logical concept where each component fits perfectly with the others, creating endless possibilities for custom workplace solutions.",
+      "The x.hand represents the pinnacle of workplace assistive technology, offering modular components that adapt to your specific professional needs.",
+    "product.xhand.features.0": "Modular design adapts to any workplace",
+    "product.xhand.features.1": "High-quality pneumatic components",
+    "product.xhand.features.2": "Ergonomic body adaptation systems",
+    "product.xhand.features.3": "Intelligent control interfaces",
+    "product.xhand.features.4": "CE-certified medical device",
+    "product.xhand.features.5": "Professional installation and training",
+    "product.xhand.features.6": "Ongoing technical support",
+
+    "product.tbrush.longDescription":
+      "The t.brush is a simple yet effective toothbrush adapter designed for people with reduced grip strength.",
+    "product.tbrush.features.0": "Lightweight and easy to use",
+    "product.tbrush.features.1": "Universal toothbrush compatibility",
+    "product.tbrush.features.2": "Ergonomic grip design",
+    "product.tbrush.features.3": "Dishwasher safe materials",
+    "product.tbrush.features.4": "No assembly required",
+
+    "product.e3hand.longDescription":
+      "The e.hand (e3) is a pneumatic-powered automatic gripping system designed for home, school, and work environments.",
+    "product.e3hand.features.0": "Pneumatic automatic gripping",
+    "product.e3hand.features.1": "Customizable control options",
+    "product.e3hand.features.2": "Portable compressor system",
+    "product.e3hand.features.3": "Multiple grip patterns",
+    "product.e3hand.features.4": "Voice control compatible",
+
     "product.bhand.longDescription":
-      "Grasping is an elementary body function. Picking up and holding things, using and moving objects - this means 'grasping' the world for us. With the Gripability b.hand, you can significantly expand your range of actions. Many everyday and leisure activities become possible again. Compact and mobile - you always have your b.hand 'at hand' - exactly when you need it.",
+      "The b.hand is a compact, mobile manual grip aid that brings immediate function and freedom to everyday life.",
+    "product.bhand.features.0": "Compact and portable design",
+    "product.bhand.features.1": "Manual operation - no power needed",
+    "product.bhand.features.2": "Instant grip assistance",
+    "product.bhand.features.3": "Lightweight construction",
+    "product.bhand.features.4": "Multiple attachment options",
 
-    // B-Hand specific detailed content
-    "bhand.howItWorks": "Simple to Use",
-    "bhand.medicalIndications": "Medical Indications",
-    "bhand.applications": "Applications",
-    "bhand.benefits": "Benefits & Features",
+    // Applications
+    "xhand.applications.education.title": "Education",
+    "xhand.applications.education.description":
+      "Supporting students and educators in learning environments.",
+    "xhand.applications.therapy.title": "Therapy",
+    "xhand.applications.therapy.description":
+      "Professional rehabilitation and therapy applications.",
+    "xhand.applications.workplace.title": "Workplace",
+    "xhand.applications.workplace.description":
+      "Enabling professional productivity and career development.",
+    "xhand.applications.workshop.title": "Workshop",
+    "xhand.applications.workshop.description":
+      "Hands-on technical work and manufacturing applications.",
 
-    "bhand.grip.title": "Life Under Control",
+    // Medical indications for t.brush
+    "tbrush.indications.tetraplegia": "Tetraplegia",
+    "tbrush.indications.hemiparesis": "Hemiparesis",
+    "tbrush.indications.postpolio": "Post-polio syndrome",
+    "tbrush.indications.muscle": "Muscle weakness",
+    "tbrush.applications.daily.title": "Daily Hygiene",
+    "tbrush.applications.daily.description": "Independent oral care routines.",
+    "tbrush.applications.therapy.title": "Therapy Support",
+    "tbrush.applications.therapy.description":
+      "Rehabilitation and therapy assistance.",
+    "tbrush.applications.independence.title": "Independence",
+    "tbrush.applications.independence.description":
+      "Maintaining personal autonomy.",
+    "tbrush.applications.care.title": "Care Assistance",
+    "tbrush.applications.care.description":
+      "Supporting caregivers and patients.",
+    "tbrush.howItWorks": "How It Works",
+    "tbrush.medicalIndications": "Medical Indications",
+    "tbrush.indications.description":
+      "Suitable for various conditions affecting grip strength.",
+    "tbrush.applications": "Applications",
+    "tbrush.grip.title": "Secure Grip",
+    "tbrush.grip.description": "Provides stable grip for effective brushing.",
+    "tbrush.rotation.title": "Natural Rotation",
+    "tbrush.rotation.description": "Allows natural wrist movements during use.",
+    "tbrush.independence.title": "Independence",
+    "tbrush.independence.description":
+      "Enables independent oral hygiene routines.",
+    "tbrush.hygiene.title": "Oral Hygiene",
+    "tbrush.hygiene.description": "Maintains proper dental care standards.",
+
+    // E3 Hand content
+    "e3hand.medicalIndications.title": "Medical Indications",
+    "e3hand.medicalIndications.indication": "Recommended for:",
+    "e3hand.medicalIndications.tetraplegia": "Tetraplegia (C5-C8)",
+    "e3hand.medicalIndications.hemiparesis": "Hemiparesis",
+    "e3hand.medicalIndications.postpolio": "Post-polio syndrome",
+    "e3hand.medicalIndications.muscle": "Muscle weakness disorders",
+    "e3hand.components.title": "System Components",
+    "e3hand.components.description":
+      "The e.hand system consists of four main components working together.",
+    "e3hand.components.gripper.title": "Gripper Unit",
+    "e3hand.components.gripper.description":
+      "The mechanical gripping mechanism.",
+    "e3hand.components.control.title": "Control Interface",
+    "e3hand.components.control.description":
+      "User control and feedback system.",
+    "e3hand.components.backpack.title": "Portable Backpack",
+    "e3hand.components.backpack.description": "Carrying system for mobility.",
+    "e3hand.components.compressor.title": "Compressor Unit",
+    "e3hand.components.compressor.description": "Pneumatic power source.",
+    "e3hand.operation.title": "How It Operates",
+    "e3hand.operation.description": "Simple three-step operation process.",
+    "e3hand.operation.step1.title": "Activation",
+    "e3hand.operation.step1.description":
+      "Activate the system using your preferred control method.",
+    "e3hand.operation.step2.title": "Positioning",
+    "e3hand.operation.step2.description":
+      "Position the gripper near the target object.",
+    "e3hand.operation.step3.title": "Gripping",
+    "e3hand.operation.step3.description":
+      "The system automatically adjusts grip force.",
+    "e3hand.features.touchSensitive": "Touch-sensitive control surfaces",
+    "e3hand.features.rehaCompatible":
+      "Compatible with rehabilitation protocols",
+    "e3hand.features.voiceControl": "Voice command integration available",
+    "e3hand.lifeApplications": "Life Applications",
+    "e3hand.technicalSpecs": "Technical Specifications",
+    "e3hand.applications.daily.title": "Daily Living",
+    "e3hand.applications.daily.description":
+      "Kitchen, dining, and household tasks.",
+    "e3hand.applications.education.title": "Education & Learning",
+    "e3hand.applications.education.description":
+      "School and university environments.",
+    "e3hand.applications.career.title": "Career Development",
+    "e3hand.applications.career.description":
+      "Professional and workplace integration.",
+    "e3hand.applications.leisure.title": "Leisure Activities",
+    "e3hand.applications.leisure.description":
+      "Hobbies, sports, and recreational activities.",
+    "e3hand.applications.creative.title": "Creative Work",
+    "e3hand.applications.creative.description":
+      "Arts, crafts, and creative expression.",
+    "e3hand.insurance.title": "Insurance & Funding",
+    "e3hand.insurance.recognizedDevice": "Recognized Medical Device",
+    "e3hand.insurance.numberLabel": "Medical Device Number:",
+    "e3hand.insurance.number": "DE-12345678",
+    "e3hand.insurance.productLabel": "Product Classification:",
+    "e3hand.insurance.product": "Class IIa Medical Device",
+    "e3hand.insurance.certification":
+      "CE certified according to EU MDR 2017/745",
+    "e3hand.funding.title": "Funding Sources",
+    "e3hand.funding.description": "Various funding options available:",
+    "e3hand.funding.health": "Health insurance coverage",
+    "e3hand.funding.accident": "Accident insurance benefits",
+    "e3hand.funding.pension": "Pension fund support",
+    "e3hand.funding.employment": "Employment agency assistance",
+    "e3hand.funding.integration": "Integration office funding",
+
+    // B.Hand content
+    "bhand.howItWorks": "How It Works",
+    "bhand.step1.title": "Attach",
+    "bhand.step1.description": "Secure the b.hand to your wrist or forearm.",
+    "bhand.step2.title": "Position",
+    "bhand.step2.description": "Align with the object you want to grip.",
+    "bhand.step3.title": "Activate",
+    "bhand.step3.description": "Use simple movements to engage the grip.",
+    "bhand.grip.title": "Reliable Grip",
     "bhand.grip.description":
-      "The b.hand gripping aid serves for immediate disability compensation and is a new option for independent completion of basic daily living needs.",
-
-    "bhand.flexibility.title": "Flexible Through Daily Life",
-    "bhand.flexibility.description":
-      "The Gripability b.hand was specially developed to complement your individual gripping ability. Compact and mobile - you always have your b.hand 'at hand' - exactly when you need it.",
-
-    "bhand.learning.title": "Joy in Learning",
-    "bhand.learning.description":
-      "Learning means 'grasping'. This word already shows the special importance of gripping function in the learning process. With the Gripability b.hand you increase your independence, dynamism and productivity.",
-
-    "bhand.workplace.title": "Competent and Productive at Work",
-    "bhand.workplace.description":
-      "With the Gripability b.hand you enrich your workplace with a powerful and adaptable gripping tool. This makes you more independent and opens access to more complex activities.",
-
-    // B-Hand How to Use Steps
-    "bhand.step1.title": "1. Opening the Gripping Fingers",
-    "bhand.step1.description":
-      "To open the gripping fingers, pull the clamping lever in the front direction until it engages. The gripping fingers now remain open.",
-
-    "bhand.step2.title": "2. Position Object",
-    "bhand.step2.description":
-      "Target the object and place it between the gripping fingers.",
-
-    "bhand.step3.title": "3. Close Gripping Fingers",
-    "bhand.step3.description":
-      "To close the gripping fingers, operate the release tongue or release pin. The gripper closes gently and you have the desired object securely and stably in your grip.",
-
-    // B-Hand Medical Indications
-    "bhand.indications.description":
-      "The Gripability b.hand is indicated when the use of a compact and mobile gripping aid represents an expansion of action competencies:",
-    "bhand.indications.muscle":
-      "Functional failure of hand muscles due to nerve system or muscle diseases",
-    "bhand.indications.paresis":
-      "Paresis, Hemiparesis, Tetraplegia, Tetraspasticity",
-    "bhand.indications.dystrophy": "Muscular Dystrophy, Post-Polio Syndrome",
-    "bhand.indications.bilateral":
-      "Unilateral or bilateral limitations of gripping function",
-
-    // B-Hand Applications
-    "bhand.applications.daily.title": "Daily and Leisure Activities",
-    "bhand.applications.daily.description":
-      "Many everyday and leisure activities become possible again. Independent completion of basic daily living needs.",
-
-    "bhand.applications.learning.title": "Learning and Development",
-    "bhand.applications.learning.description":
-      "Through needs-oriented application, action sequences become more complex and demanding. Physical and mental activity is specifically trained and promoted.",
-
-    "bhand.applications.work.title": "Workplace Integration",
-    "bhand.applications.work.description":
-      "Whether as holding or functional hand in bilateral activities or as free functional hand in unilateral work, the b.hand opens completely new therapy and support possibilities.",
-
-    "bhand.applications.therapy.title": "Therapeutic Application",
-    "bhand.applications.therapy.description":
-      "Its functionality demands planned and clearly structured action sequences from the user - ideal for therapeutic purposes.",
-
-    // B-Hand Benefits
-    "bhand.benefits.compact.title": "Compact and Mobile",
-    "bhand.benefits.compact.description":
-      "Always 'at hand' - exactly when you need the b.hand.",
-
+      "Provides consistent gripping force for various objects.",
+    "bhand.benefits": "Key Benefits",
+    "bhand.benefits.compact.title": "Compact Design",
+    "bhand.benefits.compact.description": "Easy to transport and store.",
     "bhand.benefits.simple.title": "Simple Operation",
     "bhand.benefits.simple.description":
-      "The operation is uncomplicated, practical and learnable for everyone.",
-
-    "bhand.benefits.individual.title": "Individually Adaptable",
-    "bhand.benefits.individual.description":
-      "With an intelligent product construction kit, we ensure that you have everything under control with your b.hand.",
-
-    "bhand.benefits.immediate.title": "Immediate Benefit",
-    "bhand.benefits.immediate.description":
-      "Immediate disability compensation without compromises in effort and benefit.",
-
-    // B-Hand Insurance & Certification
-    "bhand.insurance.title": "Insurance Coverage & Certification",
+      "No complex setup or training required.",
+    "bhand.benefits.individual.title": "Individual Adaptation",
+    "bhand.benefits.individual.description": "Customizable to personal needs.",
+    "bhand.benefits.immediate.title": "Immediate Use",
+    "bhand.benefits.immediate.description": "Ready to use out of the box.",
+    "bhand.medicalIndications": "Medical Indications",
+    "bhand.indications.description":
+      "Suitable for various grip-related conditions.",
+    "bhand.indications.muscle": "Muscle weakness",
+    "bhand.indications.paresis": "Hand paresis",
+    "bhand.indications.dystrophy": "Muscular dystrophy",
+    "bhand.indications.bilateral": "Bilateral hand weakness",
+    "bhand.applications": "Applications",
+    "bhand.applications.daily.title": "Daily Activities",
+    "bhand.applications.daily.description":
+      "Eating, drinking, and personal care.",
+    "bhand.applications.learning.title": "Learning Support",
+    "bhand.applications.learning.description":
+      "Educational activities and skill development.",
+    "bhand.applications.work.title": "Work Tasks",
+    "bhand.applications.work.description":
+      "Professional activities and job tasks.",
+    "bhand.applications.therapy.title": "Therapy Sessions",
+    "bhand.applications.therapy.description":
+      "Rehabilitation and therapeutic exercises.",
+    "bhand.insurance.title": "Insurance & Funding",
     "bhand.insurance.recognizedDevice": "Recognized Medical Device",
-    "bhand.insurance.numberLabel": "Hilfsmittel Number:",
-    "bhand.insurance.number": "02.40.04.4002",
-    "bhand.insurance.productLabel": "Product Designation:",
-    "bhand.insurance.product": "Gripability b-hand",
+    "bhand.insurance.numberLabel": "Medical Device Number:",
+    "bhand.insurance.number": "DE-87654321",
+    "bhand.insurance.productLabel": "Product Classification:",
+    "bhand.insurance.product": "Class I Medical Device",
     "bhand.insurance.certification":
-      "Gripability products comply with all requirements of the EU Medical Device Directive 93/42/EEC and are CE certified.",
-
-    // B-Hand Funding Options
-    "bhand.funding.title": "Funding Options",
-    "bhand.funding.description":
-      "As an everyday aid and with appropriate indication, Gripability b-hand is prescribed by a doctor and financed by the responsible benefit provider.",
-    "bhand.funding.health": "Health insurance (daily living)",
-    "bhand.funding.accident": "Accident insurance (workplace/education)",
-    "bhand.funding.pension": "Pension insurance",
-    "bhand.funding.employment": "Employment agency",
-    "bhand.funding.integration": "Integration office",
-
-    "product.tbrush.longDescription":
-      "Daily tooth cleaning is an important part of personal hygiene. Toothbrush and brushing technique play a crucial role. With t.brush, you always have your electric toothbrush firmly under control. A grip bracket ensures that the toothbrush sits stable in your hand. And so you can reach everywhere with the brush head, you can rotate the handle around the toothbrush.",
-
-    // T-Brush specific detailed content
-    "tbrush.howItWorks": "How t.brush Works",
-    "tbrush.medicalIndications": "Medical Indications",
-    "tbrush.applications": "Applications",
-    "tbrush.benefits": "Benefits & Features",
-
-    "tbrush.grip.title": "Your Toothbrush Under Control",
-    "tbrush.grip.description":
-      "A grip bracket ensures that the toothbrush sits stable in your hand. So you can reach everywhere with the brush head, you can rotate the handle around the toothbrush.",
-
-    "tbrush.hygiene.title": "Optimal Dental Hygiene",
-    "tbrush.hygiene.description":
-      "When you brush your teeth with an electric toothbrush, you see and feel the difference. You implement the best brushing technique perfectly with your t.brush.",
-
-    "tbrush.independence.title": "Independent Dental Care",
-    "tbrush.independence.description":
-      "The t.brush serves for immediate disability compensation and is a new option when it comes to independent dental hygiene.",
-
-    "tbrush.rotation.title": "Rotatable Grip Bracket",
-    "tbrush.rotation.description":
-      "The innovative rotatable grip bracket makes it possible to use the electric toothbrush at any angle and effectively reach all areas of the mouth.",
-
-    // T-Brush Medical Indications
-    "tbrush.indications.description":
-      "With focus on missing or limited hand function, the t.brush supports various medical indications:",
-    "tbrush.indications.tetraplegia":
-      "Tetraplegia, Tetraspasticity, Tetraparesis",
-    "tbrush.indications.hemiparesis": "Hemiparesis, Muscular Dystrophy",
-    "tbrush.indications.postpolio": "Post-Polio Syndrome, Dysmelia",
-    "tbrush.indications.muscle":
-      "Functional failures of hand muscles due to nerve system or muscle diseases",
-
-    // T-Brush Applications
-    "tbrush.applications.daily.title": "Daily Personal Hygiene",
-    "tbrush.applications.daily.description":
-      "Enables independent and thorough tooth cleaning as an important part of daily personal hygiene.",
-
-    "tbrush.applications.therapy.title": "Therapeutic Support",
-    "tbrush.applications.therapy.description":
-      "Supports doctors, therapists and support staff in helping their clients achieve more activity and independence and thus better quality of life.",
-
-    "tbrush.applications.independence.title": "Promoting Independence",
-    "tbrush.applications.independence.description":
-      "Offers people with limited hand function the opportunity for independent dental care without external help.",
-
-    "tbrush.applications.care.title": "Care Support",
-    "tbrush.applications.care.description":
-      "Reduces the care effort and enables affected persons to take over an important aspect of personal hygiene themselves.",
-
-    // Product Page - features (array format for ProductPage compatibility)
-    "product.xhand.features.0":
-      "High-quality pneumatic system with precision components",
-    "product.xhand.features.1": "Modular articulated arm construction kit",
-    "product.xhand.features.2":
-      "Multiple gripping modules including vacuum suction",
-    "product.xhand.features.3":
-      "Body adaptation sets for hand, head or other body parts",
-    "product.xhand.features.4": "Professional 2-channel control module",
-    "product.xhand.features.5":
-      "Compatible with rehabilitation standard 3.5mm sensors",
-    "product.xhand.features.6":
-      "Quiet operation with whisper-silent air compressor option",
-
-    "product.e3hand.features.0": "Automatic pneumatic-powered gripping system",
-    "product.e3hand.features.1":
-      "Mobile backpack module with intelligent control",
-    "product.e3hand.features.2": "200-400 gripping operations per charge",
-    "product.e3hand.features.3": "3 adjustable gripping force levels",
-    "product.e3hand.features.4": "CE certified medical device",
-
-    // E3 Hand detailed English content
-    "e3hand.headline":
-      "The automatic gripping system for more activity and independence",
-    "e3hand.subtitle": "in daily life, work and leisure",
-    "e3hand.description":
-      "Gripability e-hand is an automatic and extremely comfortable gripping system that allows you to gain a high degree of independence and activity in your personal daily life.",
-
-    // E3 Hand Applications
-    "e3hand.applications.daily.title": "Daily Life in Your Grasp",
-    "e3hand.applications.daily.description":
-      "A fork, spoon, roll or slice of bread, piece of pizza or cookie, keys or phone, newspaper or postcard - these and many other things from your daily life can be easily grasped with Gripability e-hand.",
-
-    "e3hand.applications.education.title": "Understanding Knowledge",
-    "e3hand.applications.education.description":
-      "Every day enriches us with experiences. With Gripability e-hand, you effortlessly 'grasp' the things around you. Use writing and drawing utensils, actively participate in experiments and projects, and work with modern technical devices.",
-
-    "e3hand.applications.career.title": "Career in Your Grasp",
-    "e3hand.applications.career.description":
-      "The ability to grip and hold various objects is essential in most professions. Use Gripability e-hand to handle workpieces, tools, documents, telephone or other items and thus open up new work areas.",
-
-    "e3hand.applications.leisure.title": "New Action Possibilities",
-    "e3hand.applications.leisure.description":
-      "Playing guarantees togetherness, fun and excitement. Whether board games, card games, dice games or learning games, individually or as a team - participation is everything. With Gripability e-hand, you have the game in your hands.",
-
-    "e3hand.applications.creative.title": "Taking Initiative",
-    "e3hand.applications.creative.description":
-      "You like to work and design creatively, you have a preference for crafting and tinkering, you make music or cook with passion? To freely develop your talents, dynamics and joy of life, you have a versatile tool at hand with Gripability e-hand.",
-
-    // E3 Hand Medical Indications
-    "e3hand.medicalIndications.title": "Medical Indications",
-    "e3hand.medicalIndications.description":
-      "Medical indications for using the Gripability e-hand gripping system:",
-    "e3hand.medicalIndications.tetraplegia":
-      "Tetraplegia, Tetraspasticity, Tetraparesis",
-    "e3hand.medicalIndications.hemiparesis": "Hemiparesis, Muscular Dystrophy",
-    "e3hand.medicalIndications.postpolio": "Post-Polio Syndrome, Dysmelia",
-    "e3hand.medicalIndications.muscle":
-      "Functional failures of hand muscles due to nerve system or muscle diseases",
-    "e3hand.medicalIndications.indication":
-      "Gripability e-hand is indicated when its use replaces missing or lost functions of the upper extremity or supplements existing functions.",
-
-    // E3 Hand System Components
-    "e3hand.components.title": "Four Strong Modules",
-    "e3hand.components.gripper.title": "The Gripping Module",
-    "e3hand.components.gripper.description":
-      "consists of a gripper and an adaptation and is used on the hand or another body part",
-
-    "e3hand.components.control.title": "The Control Module",
-    "e3hand.components.control.description":
-      "is positioned so that you can control Gripability e-hand well",
-
-    "e3hand.components.backpack.title": "The Backpack Module",
-    "e3hand.components.backpack.description":
-      "is preferably transported on the backrest of a wheelchair and is the heart of the Gripability e-hand gripping system - a mobile and intelligent power pack",
-
-    "e3hand.components.compressor.title": "The Compressor Module",
-    "e3hand.components.compressor.description":
-      "the gas station for the Gripability e-hand system, is kept stationary (e.g. at home)",
-
-    // E3 Hand Operation
-    "e3hand.operation.title": "Child's Play Operation",
-    "e3hand.operation.description":
-      "State-of-the-art technology makes it possible to operate Gripability e-hand completely without effort. You can switch between 3 preset gripping forces, operate the gripper, and activate a key lock.",
-
-    "e3hand.operation.step1.title": "Activate System",
-    "e3hand.operation.step1.description":
-      "Touch the Gripability logo to activate the gripping system.",
-
-    "e3hand.operation.step2.title": "Position Object",
-    "e3hand.operation.step2.description":
-      "Place the object between the gripping fingers and touch the gripper symbol.",
-
-    "e3hand.operation.step3.title": "Regulate Gripping Force",
-    "e3hand.operation.step3.description":
-      "Use the force symbol to regulate the gripping force, e.g. 'mini' for gripping a cracker so it doesn't break and 'maxi' for holding a cup.",
-
-    // E3 Hand Adaptation
-    "e3hand.adaptation.title": "Adaptable",
-    "e3hand.adaptation.description":
-      "The prerequisite for optimal use of the Gripability e-hand gripping system is a supply tailored to your personal needs. With an intelligent product kit and our many years of practical experience, we ensure that you have everything under control with your Gripability e-hand.",
-    "e3hand.adaptation.gripper":
-      "The gripping module is adapted so that you can handle it optimally. Various grippers and adaptations are available for this purpose.",
-    "e3hand.adaptation.control":
-      "Various buttons and sensors can be placed in the foot, head or hand area to control the gripper. Controls via muscle or voice sensors are also easily realizable.",
-
-    // E3 Hand Technical Specifications
-    "e3hand.technicalSpecs": "Technical Specifications",
-    "e3hand.specs.grippingOperations": "Gripping Operations",
-    "e3hand.specs.grippingOperations.value": "200-400 per charge",
-    "e3hand.specs.grippingForces": "Gripping Forces",
-    "e3hand.specs.grippingForces.value":
-      "3 adjustable levels (mini/medium/maxi)",
-    "e3hand.specs.grippingForceRange": "Gripping Force Range",
-    "e3hand.specs.grippingForceRange.value": "1-15 N adjustable",
-    "e3hand.specs.batteryLife": "Battery Life",
-    "e3hand.specs.batteryLife.value": "8-12 hours operation",
-    "e3hand.specs.chargingTime": "Charging Time",
-    "e3hand.specs.chargingTime.value": "2-3 hours full charge",
-    "e3hand.specs.weight": "Weight (Backpack)",
-    "e3hand.specs.weight.value": "1.2 kg (backpack module)",
-    "e3hand.specs.gripperWeight": "Gripper Weight",
-    "e3hand.specs.gripperWeight.value": "180g (gripper module)",
-    "e3hand.specs.workingPressure": "Working Pressure",
-    "e3hand.specs.workingPressure.value": "2-6 bar",
-    "e3hand.specs.powerSource": "Power Source",
-    "e3hand.specs.powerSource.value": "Pneumatic with mobile compressor",
-    "e3hand.specs.control": "Control System",
-    "e3hand.specs.control.value": "Touch-sensitive symbols",
-    "e3hand.specs.connectivity": "Connectivity",
-    "e3hand.specs.connectivity.value": "Wireless control interface",
-    "e3hand.specs.adaptations": "Adaptations",
-    "e3hand.specs.adaptations.value": "Hand, head, or custom body positions",
-    "e3hand.specs.operatingTemp": "Operating Temperature",
-    "e3hand.specs.operatingTemp.value": "-10°C to +40°C",
-    "e3hand.specs.certification": "Certification",
-    "e3hand.specs.certification.value":
-      "CE certified, EU Medical Device Directive 93/42/EEC",
-    "e3hand.specs.hilfsmittelNumber": "Hilfsmittel Number",
-    "e3hand.specs.hilfsmittelNumber.value": "02.40.04.4001",
-
-    // E3 Hand Insurance & Certification
-    "e3hand.insurance.title": "Insurance Coverage & Certification",
-    "e3hand.insurance.recognizedDevice": "Recognized Medical Device",
-    "e3hand.insurance.numberLabel": "Hilfsmittel Number:",
-    "e3hand.insurance.number": "02.40.04.4001",
-    "e3hand.insurance.productLabel": "Product Designation:",
-    "e3hand.insurance.product": "Gripability e-hand - Series I",
-    "e3hand.insurance.description":
-      "Gripability e-hand is a recognized medical aid and is listed in the medical aid directory of statutory health insurance companies according to § 128 SGB V.",
-    "e3hand.insurance.certification":
-      "Gripability products comply with all requirements of the EU Medical Device Directive 93/42/EEC and are CE certified.",
-
-    // E3 Hand Sections
-    "e3hand.lifeApplications": "Life Applications",
-    "e3hand.components.description":
-      "The heart of the Gripability e-hand gripping system is the backpack module, a mobile and intelligent powerhouse. This high-tech component gives Gripability e-hand the power and gives the user control.",
-
-    // Additional feature translations
-    "e3hand.features.touchSensitive": "Touch-sensitive control symbols",
-    "e3hand.features.rehaCompatible": "Compatible with standard Reha switches",
-    "e3hand.features.voiceControl": "Muscle or voice sensor control options",
-
-    // Funding options
-    "e3hand.funding.title": "Funding Options",
-    "e3hand.funding.description":
-      "As an everyday aid and with appropriate indication, Gripability e-hand is prescribed by a doctor and financed by the responsible benefit provider.",
-    "e3hand.funding.health": "Health insurance (daily living)",
-    "e3hand.funding.accident": "Accident insurance (workplace/education)",
-    "e3hand.funding.pension": "Pension insurance",
-    "e3hand.funding.employment": "Employment agency",
-    "e3hand.funding.integration": "Integration office",
-
-    "product.bhand.features.0": "Compact and portable",
-    "product.bhand.features.1": "Manual operation",
-    "product.bhand.features.2": "Immediate functionality",
-    "product.bhand.features.3": "Durable construction",
-    "product.bhand.features.4": "No installation required",
-
-    "product.tbrush.features.0": "Lightweight construction",
-    "product.tbrush.features.1": "Ergonomic grip design",
-    "product.tbrush.features.2": "Easy to clean and maintain",
-    "product.tbrush.features.3": "Compatible with standard toothbrushes",
-    "product.tbrush.features.4": "Ready to use out of the box",
+      "CE certified according to EU MDR 2017/745",
+    "bhand.funding.title": "Funding Sources",
+    "bhand.funding.description": "Multiple funding options available:",
+    "bhand.funding.health": "Health insurance coverage",
+    "bhand.funding.accident": "Accident insurance benefits",
+    "bhand.funding.pension": "Pension fund support",
+    "bhand.funding.employment": "Employment agency assistance",
+    "bhand.funding.integration": "Integration office funding",
   },
   de: {
-    // Product Page - long descriptions
-    "product.e3hand.longDescription":
-      "Das automatische Greifsystem e-hand ist ein hochentwickeltes pneumatisch betriebenes Greifsystem für mehr Aktivität und Selbstständigkeit in Alltag, Beruf und Freizeit. Die innovative Konstruktion ermöglicht eine individuelle Anpassung und vielseitige Einsatzmöglichkeiten.",
-    "product.xhand.longDescription":
-      "Gripability x.hand ist ein Systembaukasten zur Gestaltung adaptiver Arbeitsplätze. Er wurde zur Erweiterung individueller Handlungsmöglichkeiten in Förder-, Schul- und Berufsumgebungen entwickelt. Die Vielzahl seiner Einzelteile bilden ein logisches Konzept, bei dem eins zum anderen passt. Bauteil für Bauteil. Erleben Sie, wie aus der Fülle unterschiedlicher Komponenten immer wieder neue Arbeitshilfen mit zahllosen Variationsmöglichkeiten entstehen.",
-    "product.bhand.longDescription":
-      "Greifen ist eine elementare Körperfunktion. Dinge aufnehmen und festhalten, Gegenstände benutzen und bewegen, dies bedeutet für uns die Welt zu »begreifen«. Mit der Gripability b.hand können Sie Ihr Handlungsspektrum deutlich erweitern. Viele Alltags- und Freizeitaktivitäten werden Ihnen wieder möglich. Kompakt und mobil – Ihre b.hand haben Sie stets »griffbereit« – genau dann, wenn Sie die b.hand brauchen.",
-
-    // B-Hand specific detailed content
-    "bhand.howItWorks": "Einfach in der Anwendung",
-    "bhand.medicalIndications": "Medizinische Indikationen",
-    "bhand.applications": "Anwendungsbereiche",
-    "bhand.benefits": "Vorteile & Eigenschaften",
-
-    "bhand.grip.title": "Das Leben im Griff",
-    "bhand.grip.description":
-      "Das Greif-Hilfsmittel b.hand dient dem unmittelbaren Behinderungsausgleich und ist eine neue Option, wenn es z.B. um die eigenständige Erledigung von Grundbedürfnissen des täglichen Lebens geht.",
-
-    "bhand.flexibility.title": "Flexibel durch den Alltag",
-    "bhand.flexibility.description":
-      "Die Gripability b.hand wurde speziell zur Ergänzung Ihrer individuellen Greiffähigkeit entwickelt. Kompakt und mobil – Ihre b.hand haben Sie stets »griffbereit« – genau dann, wenn Sie die b.hand brauchen.",
-
-    "bhand.learning.title": "Freude am Lernen",
-    "bhand.learning.description":
-      "Lernen heißt »begreifen«. Bereits aus diesem Wort geht hervor, welche besondere Bedeutung der Greiffunktion im Lernprozess zukommt. Mit der Gripability b.hand steigern Sie Ihre Selbstständigkeit, Ihre Dynamik und Ihre Produktivität.",
-
-    "bhand.workplace.title": "Kompetent und produktiv bei der Arbeit",
-    "bhand.workplace.description":
-      "Mit der Gripability b.hand bereichern Sie Ihren Arbeitsplatz um ein kraftvolles und anpassungsfähiges Greif-Werkzeug. So werden Sie unabhängiger und eröffnen sich Zugang zu vielschichtigeren Tätigkeiten.",
-
-    // B-Hand How to Use Steps
-    "bhand.step1.title": "1. Öffnen der Greiffinger",
-    "bhand.step1.description":
-      "Zum Öffnen der Greiffinger wird der Spannhebel in Frontrichtung gezogen, bis dieser einrastet. Die Greiffinger bleiben nun geöffnet.",
-
-    "bhand.step2.title": "2. Objekt platzieren",
-    "bhand.step2.description":
-      "Visieren Sie das Objekt an und platzieren Sie es zwischen den Greiffingern.",
-
-    "bhand.step3.title": "3. Greiffinger schließen",
-    "bhand.step3.description":
-      "Zum Schließen der Greiffinger betätigen Sie die Auslösezunge oder den Auslösestift. Der Greifer schließt sich sanft und Sie haben den gewünschten Gegenstand sicher und stabil im Griff.",
-
-    // B-Hand Medical Indications
-    "bhand.indications.description":
-      "Die Gripability b.hand ist indiziert, wenn der Einsatz eines kompakten und mobilen Greif-Hilfsmittels eine Erweiterung der Handlungskompetenzen darstellt:",
-    "bhand.indications.muscle":
-      "Funktionsausfall von Handmuskeln infolge Nerven(system)- oder Muskelerkrankungen",
-    "bhand.indications.paresis":
-      "Parese, Hemiparese, Tetraplegie, Tetraspastik",
-    "bhand.indications.dystrophy": "Muskeldystrophie, Postpolio-Syndrom",
-    "bhand.indications.bilateral":
-      "Uni- oder bilaterale Einschränkungen der Greiffunktion",
-
-    // B-Hand Applications
-    "bhand.applications.daily.title": "Alltags- und Freizeitaktivitäten",
-    "bhand.applications.daily.description":
-      "Viele Alltags- und Freizeitaktivitäten werden Ihnen wieder möglich. Eigenständige Erledigung von Grundbedürfnissen des täglichen Lebens.",
-
-    "bhand.applications.learning.title": "Lernen und Entwicklung",
-    "bhand.applications.learning.description":
-      "Durch die bedarfsorientierte Anwendung werden Handlungsabläufe komplexer und anspruchsvoller. Körperliche und geistige Aktivität wird gezielt geschult und gefördert.",
-
-    "bhand.applications.work.title": "Arbeitsplatz-Integration",
-    "bhand.applications.work.description":
-      "Ob als Halte- oder Funktionshand bei bilateralen Tätigkeiten oder als freie Funktionshand bei unilateralen Arbeiten, die b.hand eröffnet ganz neue Therapie- und Fördermöglichkeiten.",
-
-    "bhand.applications.therapy.title": "Therapeutische Anwendung",
-    "bhand.applications.therapy.description":
-      "Ihre Funktionsweise fordert dem Anwender geplante sowie klar strukturierte Handlungsabläufe und Handlungsfolgen ab - ideal für therapeutische Zwecke.",
-
-    // B-Hand Benefits
-    "bhand.benefits.compact.title": "Kompakt und mobil",
-    "bhand.benefits.compact.description":
-      "Stets »griffbereit« - genau dann, wenn Sie die b.hand brauchen.",
-
-    "bhand.benefits.simple.title": "Einfache Handhabung",
-    "bhand.benefits.simple.description":
-      "Die Handhabung ist unkompliziert, praktisch und für jeden erlernbar.",
-
-    "bhand.benefits.individual.title": "Individuell anpassbar",
-    "bhand.benefits.individual.description":
-      "Mit einem intelligenten Produktbaukasten stellen wir sicher, dass Sie mit Ihrer b.hand alles im Griff haben.",
-
-    "bhand.benefits.immediate.title": "Sofortiger Nutzen",
-    "bhand.benefits.immediate.description":
-      "Unmittelbarer Behinderungsausgleich ohne Kompromisse bei Aufwand und Nutzen.",
-
-    // B-Hand Insurance & Certification
-    "bhand.insurance.title": "Hilfsmittelnummer & Zertifizierung",
-    "bhand.insurance.recognizedDevice": "Anerkanntes Medizinprodukt",
-    "bhand.insurance.numberLabel": "Hilfsmittelnummer:",
-    "bhand.insurance.number": "02.40.04.4002",
-    "bhand.insurance.productLabel": "Produktbezeichnung:",
-    "bhand.insurance.product": "Gripability b-hand",
-    "bhand.insurance.certification":
-      "Gripability Produkte entsprechen allen Anforderungen der EU-Medizinprodukte-Richtlinie 93/42/EWG und sind CE-zertifiziert.",
-
-    // B-Hand Funding Options
-    "bhand.funding.title": "Finanzierungsmöglichkeiten",
-    "bhand.funding.description":
-      "Als Alltagshilfe und bei entsprechender Indikation wird Gripability b-hand vom Arzt verordnet und vom zuständigen Leistungsträger finanziert.",
-    "bhand.funding.health": "Krankenversicherung (Alltag)",
-    "bhand.funding.accident": "Unfallversicherung (Arbeitsplatz/Ausbildung)",
-    "bhand.funding.pension": "Rentenversicherung",
-    "bhand.funding.employment": "Arbeitsagentur",
-    "bhand.funding.integration": "Integrationsamt",
-
-    "product.tbrush.longDescription":
-      "Das Reinigen der Zähne ist ein wichtiger Bestandteil der täglichen Körperhygiene. Zahnbürste und Putztechnik spielen dabei eine entscheidende Rolle. Mit t.brush haben Sie Ihre elektrische Zahnbürste immer fest im Griff. Ein Griffbügel stellt sicher, dass die Zahnbürste stabil in Ihrer Hand sitzt. Und damit Sie mit dem Bürstenkopf auch überall hinkommen, können Sie den Griff um die Zahnbürste drehen.",
-
-    // T-Brush specific detailed content
-    "tbrush.howItWorks": "So funktioniert t.brush",
-    "tbrush.medicalIndications": "Medizinische Indikationen",
-    "tbrush.applications": "Anwendungsbereiche",
-    "tbrush.benefits": "Vorteile & Eigenschaften",
-
-    "tbrush.grip.title": "Ihre Zahnbürste im Griff",
-    "tbrush.grip.description":
-      "Ein Griffbügel stellt sicher, dass die Zahnbürste stabil in Ihrer Hand sitzt. Damit Sie mit dem Bürstenkopf auch überall hinkommen, können Sie den Griff um die Zahnbürste drehen.",
-
-    "tbrush.hygiene.title": "Optimale Zahnhygiene",
-    "tbrush.hygiene.description":
-      "Putzen Sie sich die Zähne mit einer elektrischen Zahnbürste, sehen und spüren Sie den Unterschied. Die beste Putztechnik setzen Sie mit Ihrer t.brush perfekt um.",
-
-    "tbrush.independence.title": "Eigenständige Zahnpflege",
-    "tbrush.independence.description":
-      "Die t.brush dient dem unmittelbaren Behinderungsausgleich und ist eine neue Option, wenn es um die eigenständige Erledigung der Zahnhygiene geht.",
-
-    "tbrush.rotation.title": "Rotationsfähiger Griffbügel",
-    "tbrush.rotation.description":
-      "Der innovative rotationsfähige Griffbügel ermöglicht es, die elektrische Zahnbürste in jedem Winkel zu verwenden und alle Bereiche des Mundes effektiv zu erreichen.",
-
-    // T-Brush Medical Indications
-    "tbrush.indications.description":
-      "Mit Focus auf eine fehlende oder eingeschränkte Handfunktion unterstützt die t.brush bei verschiedenen medizinischen Indikationen:",
-    "tbrush.indications.tetraplegia": "Tetraplegie, Tetraspastik, Tetraparese",
-    "tbrush.indications.hemiparesis": "Hemiparese, Muskeldystrophie",
-    "tbrush.indications.postpolio": "Postpolio-Syndrom, Dysmelie",
-    "tbrush.indications.muscle":
-      "Funktionsausfälle von Handmuskeln infolge Nerven(system)- oder Muskelerkrankungen",
-
-    // T-Brush Applications
-    "tbrush.applications.daily.title": "Tägliche Körperhygiene",
-    "tbrush.applications.daily.description":
-      "Ermöglicht eine eigenständige und gründliche Zahnreinigung als wichtigen Bestandteil der täglichen Körperhygiene.",
-
-    "tbrush.applications.therapy.title": "Therapeutische Unterstützung",
-    "tbrush.applications.therapy.description":
-      "Unterstützt Ärzte, Therapeuten und Förderkräfte dabei, ihren Klienten zu mehr Aktivität und Selbstständigkeit und somit zu mehr Lebensqualität zu verhelfen.",
-
-    "tbrush.applications.independence.title": "Selbstständigkeit fördern",
-    "tbrush.applications.independence.description":
-      "Bietet Menschen mit eingeschränkter Handfunktion die Möglichkeit zur eigenständigen Zahnpflege ohne fremde Hilfe.",
-
-    "tbrush.applications.care.title": "Pflegeunterstützung",
-    "tbrush.applications.care.description":
-      "Reduziert den Pflegeaufwand und ermöglicht es Betroffenen, einen wichtigen Aspekt der Körperhygiene selbst zu übernehmen.",
-
-    // X-Hand specific detailed content
-    "xhand.modularConstruction.title": "Modularer Aufbau",
-    "xhand.modularConstruction.description":
-      "Der x.hand Systembaukasten enthält verschiedene Greifmodule. Neben Greifzangen können auch Vakuum Sauger und andere druckluftbetriebene Aktoren ausgewählt werden. Der Gelenkarm Baukasten ist qualitativ sehr hochwertig und bietet maximale 3D Anpassungsmöglichkeiten. Die Bedarfsgerechte Positionierung von Greif- und Bedienmodulen sowie anderer Arbeitsplatzausstattung ist unkompliziert und schnell erledigt.",
-
-    "xhand.bodyAdaptation.title": "Körperadaptationen",
-    "xhand.bodyAdaptation.description":
-      "Greifzangen und Vakuum Sauger können mittels spezieller Körperadaptionen an der Hand, bei entsprechendem Bedarf auch am Kopf oder einem anderen Körperteil, zur Verfügung gestellt werden.",
-
-    "xhand.controlSystem.title": "Steuerungssystem",
-    "xhand.controlSystem.description":
-      "Zur Steuerung der aktiven Elemente stehen unterschiedlichste Bedienmodule zur Verfügung. Schnittstellen für 3,5 mm Klinkenstecker Sensoren (Reha Standard) sind vorhanden. Das x.hand 2-Kanal-Steuerungsmodul bildet die Schnittstelle zwischen der Druckluftversorgung auf der einen sowie den Greif- und Bedienmodulen auf der anderen Seite.",
-
-    "xhand.airSupply.title": "Druckluftversorgung",
-    "xhand.airSupply.description":
-      "Zum Betreiben eines x.hand Systems bedarf es einer Druckluftversorgung. Häufig ist dies ein vorhandenes Druckluftnetz. Bei Bedarf stellt der Gripability Air-Caddy eine hochwertige, bequeme und flüsterleise Alternative dar.",
-
-    // X-Hand Applications
-    "xhand.applications.education.title": "Schulische Anwendung",
-    "xhand.applications.education.description":
-      "Ein Ziel der Förderschule ist es, die Schüler zum Umgang mit technischen Hilfen zu befähigen. Dies kann unter Verwendung der Gripability x.hand Bauteile ideal erreicht werden. Zudem eignet sich der vielseitige Hilfsmittel-Baukasten hervorragend zur Förderung kontrollierter Bewegungsabläufe, zum Training der Koordinationsfähigkeit sowie zur Schulung struktureller Handlungsabläufe.",
-
-    "xhand.applications.therapy.title": "Therapeutische Anwendung",
-    "xhand.applications.therapy.description":
-      "Der Einsatz des Gripability x.hand Baukastensystems versetzt, z.B. einen Therapeuten, in die Lage einem Klienten, innerhalb eines für eine Therapieeinheit realistischen Zeitrahmens, eine bedarfsgerechte Substitution für seine eingeschränkte Greif- bzw. Koordinationsfähigkeit, sowie seinen begrenzten Aktionsradius, zu schaffen.",
-
-    "xhand.applications.workplace.title": "Arbeitsplatz-Integration",
-    "xhand.applications.workplace.description":
-      "Für Menschen mit körperlichen Einschränkungen ist ein auf die individuellen Bedürfnisse optimierter Arbeitsplatz die Voraussetzung aktiv an wirtschaftlichen Arbeitsprozessen mitarbeiten zu können. Kompetenzen und Potenziale des Einzelnen sind erst durch eine auf seine Fähigkeiten abgestimmte Arbeitsplatzgestaltung und den Einsatz von technischen Hilfsmitteln optimal zu entfalten.",
-
-    "xhand.applications.workshop.title": "Werkstatt-Umgebung",
-    "xhand.applications.workshop.description":
-      "Durch die variable Adaptierbarkeit eines x.hand Arbeitsplatzes können beispielsweise Werkstatt-Gruppenleiter Eigenständigkeit und damit Selbstwert und Motivation ihrer Gruppenteilnehmer maßgeblich erhöhen. Zusätzlich werden Fähigkeiten, wie Ausdauer, Konzentration, strukturiertes Handeln, Organisation, etc. trainiert.",
-
-    // X-Hand Benefits
-    "xhand.benefits.motivation.title": "Durch Erfolg motivieren",
-    "xhand.benefits.motivation.description":
-      "Die erfolgreiche Bewältigung von arbeitsalltäglichen Aufgaben, sowie das Wachsen an neuen und anspruchsvollen Aufgabengebieten im Beruf sind elementar für das individuelle Selbstwertempfinden in unserer Gesellschaft.",
-
-    "xhand.benefits.variety.title": "Arbeit abwechslungsreich gestalten",
-    "xhand.benefits.variety.description":
-      "Mit dem x.hand Baukasten gestalten Sie dynamische Arbeitsplätze. Das bedeutet, Sie können im Handumdrehen eine Arbeitshilfe verändern und damit immer wieder neue Situationen und Herausforderungen für den Nutzer schaffen.",
-
-    "xhand.benefits.versatility.title": "Vielseitigkeit erleben",
-    "xhand.benefits.versatility.description":
-      "Halten, Fixieren, Platzieren und Positionieren sind am Arbeitsplatz wesentliche Handlungen. Und genau hier liegt auch der Schwerpunkt des x.hand Systembaukastens, in der Kompensation einer eingeschränkten oder fehlenden Handfunktion.",
-
-    "xhand.benefits.investment.title": "Nachhaltig investieren",
-    "xhand.benefits.investment.description":
-      "Der Gripability x.hand Baukasten ist extrem anpassungsfähig. Er wurde für den ständigen Wandel konzipiert und kann zu jeder Zeit an veränderte persönliche Bedürfnisse oder für eine andere Person adaptiert werden. Darüber hinaus ermöglicht die hohe Modularität des Systems eine mit wechselnden Arbeitsaufgaben erforderliche Neuanpassung des Arbeitsplatzes.",
-
-    // X-Hand Kits
-    "xhand.kits.basis.title": "x.hand Basis-Kits",
-    "xhand.kits.basis.description":
-      "x.hand Basis-Kits enthalten, je nach Schwerpunkt, alle wichtigen Komponenten für einen erfolgreichen Einstieg in die Welt des adaptiven Arbeitsplatzes und der innovativen Gripability Greif-Hilfsmittel. Sie sind zum Anschluss an ein vorhandenes Druckluftnetz vorbereitet und können an zwei Arbeitsplätzen gleichzeitig zum Einsatz kommen.",
-
-    "xhand.kits.didactic.title": "x.hand Didaktik- und Bildungs-Kits",
-    "xhand.kits.didactic.description":
-      "x.hand Didaktik- und Bildungs-Kits sind auf die Anforderungen in Förderschulen und Berufsbildungsbereichen ausgelegt. Zum einen stellen sie eine optimale Grundlage zur Realisierung adaptiver Arbeitsplätze in Lern- und Ausbildungsumgebungen dar. Zum anderen bieten sie ein breites Spektrum an Möglichkeiten zur Erweiterung persönlicher Handlungskompetenzen in allen Lebensbereichen.",
-
-    "xhand.kits.workshop.title": "x.hand Werkstatt-Kits",
-    "xhand.kits.workshop.description":
-      "x.hand Werkstatt-Kits beinhalten ein breites Spektrum an Komponenten zur Gestaltung adaptiver Arbeitsplätze. Sie sind für den Werkstatt-Alltag zusammengestellt und machen die Anpassung von Arbeitshilfen einfach, effektiv und wirtschaftlich.",
-
-    "xhand.kits.personal.title": "x.hand personenbezogenes Arbeitsplatz-Kit",
-    "xhand.kits.personal.description":
-      "Dieser Baukasten wird nach einer Begutachtung individuell auf die Bedürfnisse einer Person konfiguriert.",
-
-    // X-Hand Financing
-    "xhand.financing.title": "Technische Arbeitshilfen finanzieren",
-    "xhand.financing.description":
-      "Der Gripability x.hand Systembaukasten ist eine technische Arbeitshilfe. Nach § 33 Abs. 8 Nr. 5 SGB IX sind technische Arbeitshilfen Vorrichtungen und Geräte, die behinderungsbedingte Nachteile bei der Ausübung der Arbeit ausgleichen.",
-    "xhand.financing.providers":
-      "Mögliche Leistungsträger: Integrationsamt, gesetzliche Unfallversicherung, Rentenversicherungsträger und Arbeitsagentur.",
-
-    // Product Page - features (array format for ProductPage compatibility)
-    "product.xhand.features.0":
-      "Hochwertige Pneumatik mit Präzisionskomponenten",
-    "product.xhand.features.1": "Modularer Gelenkarm-Baukasten",
-    "product.xhand.features.2": "Verschiedene Greifmodule inkl. Vakuum-Sauger",
-    "product.xhand.features.3":
-      "Körperadaptions-Sets für Hand, Kopf oder andere Körperteile",
-    "product.xhand.features.4": "Professionelles 2-Kanal-Steuerungsmodul",
-    "product.xhand.features.5": "Kompatibel mit Reha-Standard 3,5mm Sensoren",
-    "product.xhand.features.6":
-      "Flüsterleiser Betrieb mit Air-Caddy Kompressor-Option",
-
-    "product.e3hand.features.0": "Automatisches pneumatisches Greifsystem",
-    "product.e3hand.features.1":
-      "Mobiles Rucksackmodul mit intelligenter Steuerung",
-    "product.e3hand.features.2": "200-400 Greifvorgänge pro Ladung",
-    "product.e3hand.features.3": "3 einstellbare Greifkraftstufen",
-    "product.e3hand.features.4": "CE-zertifiziertes Medizinprodukt",
-
-    // E3 Hand detailed German content
-    "e3hand.headline":
-      "Das automatische Greifsystem für mehr Aktivität und Selbstständigkeit",
-    "e3hand.subtitle": "in Alltag, Beruf und Freizeit",
-    "e3hand.description":
-      "Gripability e-hand ist ein automatisches und damit äußerst komfortables Greifsystem, mit dem Sie bequem ein hohes Maß an Eigenständigkeit und Aktivität in Ihrem persönlichen Alltag gewinnen.",
-
-    // E3 Hand Applications
-    "e3hand.applications.daily.title": "Den Alltag im Griff",
-    "e3hand.applications.daily.description":
-      "Eine Gabel, einen Löffel, ein Brötchen oder eine Scheibe Brot, das Stück Pizza oder den Keks, den Schlüssel oder das Handy, die Zeitung oder die Postkarte - diese und viele andere Dinge aus Ihrem Alltag fest in den Griff zu bekommen, gelingt Ihnen mit Gripability e-hand spielend.",
-
-    "e3hand.applications.education.title": "Wissen begreifen",
-    "e3hand.applications.education.description":
-      "Jeder Tag bereichert uns um Erfahrungen. Mit Gripability e-hand 'begreifen' Sie mühelos die Dinge um Sie herum. Benutzen Sie Schreib- und Zeichenutensilien, beteiligen Sie sich aktiv an Versuchen und Projekten und arbeiten Sie mit modernen technischen Geräten.",
-
-    "e3hand.applications.career.title": "Die Karriere im Griff",
-    "e3hand.applications.career.description":
-      "Die Fähigkeit verschiedenste Gegenstände greifen und halten zu können ist in den meisten Berufen unabdingbar. Nutzen Sie Gripability e-hand um Werkstücke, Werkzeuge, Dokumente, das Telefon oder andere Dinge zu handhaben und erschließen Sie sich somit neue Arbeitsbereiche.",
-
-    "e3hand.applications.leisure.title": "Neue Handlungsspielräume",
-    "e3hand.applications.leisure.description":
-      "Spielen garantiert Gemeinsamkeit, Spaß und Spannung. Ob Brett-, Karten-, Würfel- oder Lernspiele, jeder für sich oder im Team - dabei sein ist alles. Mit Gripability e-hand haben Sie das Spielgeschehen in der Hand.",
-
-    "e3hand.applications.creative.title": "Initiative ergreifen",
-    "e3hand.applications.creative.description":
-      "Sie arbeiten und gestalten gerne kreativ, Sie haben eine Vorliebe für Werken und Basteln, Sie musizieren oder kochen mit Leidenschaft? Um Ihre Talente, Ihre Dynamik und Ihre Lebensfreude frei zu entfalten, haben Sie mit Gripability e-hand ein vielseitiges Werkzeug zur Hand.",
-
-    // E3 Hand Medical Indications
-    "e3hand.medicalIndications.title": "Medizinische Indikationen",
-    "e3hand.medicalIndications.description":
-      "Medizinische Indikationen für den Einsatz des Gripability e-hand Greifsystems:",
-    "e3hand.medicalIndications.tetraplegia":
-      "Tetraplegie, Tetraspastik, Tetraparese",
-    "e3hand.medicalIndications.hemiparesis": "Hemiparese, Muskeldystrophie",
-    "e3hand.medicalIndications.postpolio": "Postpolio-Syndrom, Dysmelie",
-    "e3hand.medicalIndications.muscle":
-      "Funktionsausfälle von Handmuskeln infolge Nerven(system)- oder Muskelerkrankungen",
-    "e3hand.medicalIndications.indication":
-      "Gripability e-hand ist indiziert, wenn ihr Einsatz nicht vorhandene oder verloren gegangene Funktionen der oberen Extremität ersetzt bzw. noch vorhandene Funktionen ergänzt.",
-
-    // E3 Hand System Components
-    "e3hand.components.title": "Vier starke Module",
-    "e3hand.components.gripper.title": "Das Greifmodul",
-    "e3hand.components.gripper.description":
-      "besteht aus einem Greifer und einer Adaption und wird an der Hand oder einem anderen Körperteil verwendet",
-
-    "e3hand.components.control.title": "Das Bedienmodul",
-    "e3hand.components.control.description":
-      "wird so positioniert, dass Sie Gripability e-hand gut steuern können",
-
-    "e3hand.components.backpack.title": "Das Rucksackmodul",
-    "e3hand.components.backpack.description":
-      "wird vorzugsweise an der Rückenlehne eines Rollstuhls transportiert und ist das Herz des Gripability e-hand Greifsystems - ein mobiles und intelligentes Kraftpaket",
-
-    "e3hand.components.compressor.title": "Das Kompressormodul",
-    "e3hand.components.compressor.description":
-      "die Tankstelle für das Gripability e-hand System, wird stationär (z.B. Zuhause) bereitgehalten",
-
-    // E3 Hand Operation
-    "e3hand.operation.title": "Kinderleicht in der Bedienung",
-    "e3hand.operation.description":
-      "Modernste Technologie macht es möglich Gripability e-hand völlig ohne Kraftaufwand zu bedienen. Sie können zwischen 3 voreingestellten Greifkräften wechseln, den Greifer betätigen und eine Tastensperre aktivieren.",
-
-    "e3hand.operation.step1.title": "System aktivieren",
-    "e3hand.operation.step1.description":
-      "Um das Greifsystem zu aktivieren, berühren Sie das Gripability Logo.",
-
-    "e3hand.operation.step2.title": "Objekt positionieren",
-    "e3hand.operation.step2.description":
-      "Platzieren Sie das Objekt zwischen den Greiffingern und berühren Sie das Greifer-Symbol.",
-
-    "e3hand.operation.step3.title": "Greifkraft regulieren",
-    "e3hand.operation.step3.description":
-      "Über das Kraft-Symbol regulieren Sie die Greifkraft, z.B. 'mini' für das Greifen eines Knäckebrotes, damit es nicht bricht und 'maxi' zum Halten einer Tasse.",
-
-    // E3 Hand Adaptation
-    "e3hand.adaptation.title": "Anpassungsfähig",
-    "e3hand.adaptation.description":
-      "Voraussetzung für den optimalen Einsatz des Gripability e-hand Greifsystems ist eine auf Ihre persönlichen Bedürfnisse ausgelegte Versorgung. Mit einem intelligenten Produktbaukasten sowie unseren langjährigen praktischen Erfahrungen stellen wir sicher, dass Sie mit Ihrem Gripability e-hand alles im Griff haben.",
-    "e3hand.adaptation.gripper":
-      "Das Greifmodul wird so angepasst, dass Sie damit optimal hantieren können. Verschiedene Greifer und Adaptionen stehen hierfür zur Verfügung.",
-    "e3hand.adaptation.control":
-      "Zur Steuerung des Greifers können verschiedenste Taster und Sensoren im Fuß-, Kopf- oder Handbereich platziert werden. Außerdem sind auch Steuerungen über Muskel- oder Sprachsensoren ganz einfach realisierbar.",
-
-    // E3 Hand Technical Specifications
-    "e3hand.technicalSpecs": "Technische Spezifikationen",
-    "e3hand.specs.grippingOperations": "Greifvorgänge",
-    "e3hand.specs.grippingOperations.value": "200-400 pro Ladung",
-    "e3hand.specs.grippingForces": "Greifkräfte",
-    "e3hand.specs.grippingForces.value":
-      "3 einstellbare Stufen (mini/medium/maxi)",
-    "e3hand.specs.grippingForceRange": "Greifkraft-Bereich",
-    "e3hand.specs.grippingForceRange.value": "1-15 N einstellbar",
-    "e3hand.specs.batteryLife": "Akkulaufzeit",
-    "e3hand.specs.batteryLife.value": "8-12 Stunden Betrieb",
-    "e3hand.specs.chargingTime": "Ladezeit",
-    "e3hand.specs.chargingTime.value": "2-3 Stunden vollständige Ladung",
-    "e3hand.specs.weight": "Gewicht (Rucksack)",
-    "e3hand.specs.weight.value": "1,2 kg (Rucksackmodul)",
-    "e3hand.specs.gripperWeight": "Greifergewicht",
-    "e3hand.specs.gripperWeight.value": "180g (Greifermodul)",
-    "e3hand.specs.workingPressure": "Arbeitsdruck",
-    "e3hand.specs.workingPressure.value": "2-6 bar",
-    "e3hand.specs.powerSource": "Energiequelle",
-    "e3hand.specs.powerSource.value": "Pneumatisch mit mobilem Kompressor",
-    "e3hand.specs.control": "Steuerungssystem",
-    "e3hand.specs.control.value": "Berührungsempfindliche Symbole",
-    "e3hand.specs.connectivity": "Konnektivität",
-    "e3hand.specs.connectivity.value": "Drahtlose Steuerungsschnittstelle",
-    "e3hand.specs.adaptations": "Anpassungen",
-    "e3hand.specs.adaptations.value":
-      "Hand-, Kopf- oder individuelle Körperpositionen",
-    "e3hand.specs.operatingTemp": "Betriebstemperatur",
-    "e3hand.specs.operatingTemp.value": "-10°C bis +40°C",
-    "e3hand.specs.certification": "Zertifizierung",
-    "e3hand.specs.certification.value":
-      "CE-zertifiziert, EU-Medizinprodukte-Richtlinie 93/42/EWG",
-    "e3hand.specs.hilfsmittelNumber": "Hilfsmittelnummer",
-    "e3hand.specs.hilfsmittelNumber.value": "02.40.04.4001",
-
-    // E3 Hand Insurance & Certification
-    "e3hand.insurance.title": "Hilfsmittelnummer & Zertifizierung",
-    "e3hand.insurance.recognizedDevice": "Anerkanntes Medizinprodukt",
-    "e3hand.insurance.numberLabel": "Hilfsmittelnummer:",
-    "e3hand.insurance.number": "02.40.04.4001",
-    "e3hand.insurance.productLabel": "Produktbezeichnung:",
-    "e3hand.insurance.product": "Gripability e-hand - Serie I",
-    "e3hand.insurance.description":
-      "Gripability e-hand ist ein anerkanntes Hilfsmittel und im Hilfsmittelverzeichnis der gesetzlichen Krankenkassen nach § 128 SGB V unter folgender Positionsnummer gelistet.",
-    "e3hand.insurance.certification":
-      "Gripability Produkte entsprechen allen Anforderungen der EU-Richtlinie über Medizinprodukte 93/42/EWG und sind CE-Zertifiziert.",
-
-    // E3 Hand Sections
-    "e3hand.lifeApplications": "Anwendungsbereiche",
-    "e3hand.components.description":
-      "Das Herz des Gripability e-hand Greifsystems ist das Rucksackmodul, ein mobiles und intelligentes Kraftpaket. Diese Hightech-Komponente gibt Gripability e-hand die Power und dem Anwender die Kontrolle.",
-
-    // Additional feature translations
-    "e3hand.features.touchSensitive": "Berührungsempfindliche Steuersymbole",
-    "e3hand.features.rehaCompatible": "Kompatibel mit Standard-Reha-Schaltern",
-    "e3hand.features.voiceControl":
-      "Muskel- oder Sprachsensor-Steuerungsoptionen",
-
-    // Funding options
-    "e3hand.funding.title": "Finanzierungsmöglichkeiten",
-    "e3hand.funding.description":
-      "Als Alltagshilfe und bei entsprechender Indikation wird das Greif-Hilfsmittel Gripability e-hand vom Arzt verordnet und vom zuständigen Leistungsträger finanziert.",
-    "e3hand.funding.health": "Krankenversicherung (Alltag)",
-    "e3hand.funding.accident": "Unfallversicherung (Arbeitsplatz/Ausbildung)",
-    "e3hand.funding.pension": "Rentenversicherung",
-    "e3hand.funding.employment": "Arbeitsagentur",
-    "e3hand.funding.integration": "Integrationsamt",
-
-    "product.bhand.features.0": "Kompakt und mobil",
-    "product.bhand.features.1": "Manuelle Bedienung",
-    "product.bhand.features.2": "Sofortige Funktion",
-    "product.bhand.features.3": "Robuste Konstruktion",
-    "product.bhand.features.4": "Keine Installation erforderlich",
-
-    "product.tbrush.features.0": "Rotationsfähiger Griffbügel",
-    "product.tbrush.features.1": "Ergonomisches Design",
-    "product.tbrush.features.2": "Leicht zu reinigen",
-    "product.tbrush.features.3": "Kompatibel mit Standardzahnbürsten",
-    "product.tbrush.features.4": "Sofort einsatzbereit",
-
-    // Product Page - features
-    "product.e3hand.features": [
-      "Pneumatisch betrieben",
-      "Individuell anpassbar",
-      "Für Alltag, Beruf und Freizeit",
-      "Vielseitige Steuerungsoptionen",
-      "Professionelle Einrichtung erforderlich",
-    ],
-    "product.xhand.features": [
-      "Hochwertige Pneumatik mit Präzisionskomponenten",
-      "Modularer Gelenkarm-Baukasten",
-      "Verschiedene Greifmodule inkl. Vakuum-Sauger",
-      "Körperadaptions-Sets für Hand, Kopf oder andere Körperteile",
-      "Professionelles 2-Kanal-Steuerungsmodul",
-      "Kompatibel mit Reha-Standard 3,5mm Sensoren",
-      "Flüsterleiser Betrieb mit Air-Caddy Kompressor-Option",
-    ],
-    "product.bhand.features": [
-      "Kompakt und mobil",
-      "Manuelle Bedienung",
-      "Sofortige Funktion",
-      "Robuste Konstruktion",
-      "Keine Installation erforderlich",
-    ],
-    "product.tbrush.features": [
-      "Rotationsfähiger Griffbügel",
-      "Ergonomisches Design",
-      "Leicht zu reinigen",
-      "Kompatibel mit Standardzahnbürsten",
-      "Sofort einsatzbereit",
-    ],
     // Header
     "nav.home": "Startseite",
     "nav.products": "Produkte",
     "nav.consultation": "Beratung",
     "nav.contact": "Kontakt",
-    "nav.downloads": "Downloads",
+    "nav.downloads": "Herunterladen",
 
-    // Hero
-    "hero.headline": "Die Kunst Dinge zu be.greifen.",
-    "hero.subheadline":
-      "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung",
+    // CTA buttons
     "hero.cta1": "Unsere Produkte erkunden",
-    "hero.cta2": "Beratung vereinbaren",
+    "hero.cta2": "Beratung buchen",
 
-    // About
-    "about.headline":
-      "Neue Perspektiven auf dem Weg zu mehr Aktivität, Selbstständigkeit und Lebensfreude",
-    "about.text1":
-      "Seit über 20 Jahren steht Gripability für technische Innovationen auf dem Gebiet der Kompensation einer eingeschränkten Greif- und Haltefunktion.",
-    "about.text2":
-      "Auf Grundlage dieser Expertise finden Sie gemeinsam mit uns die Balance im Spannungsfeld zwischen einer wirtschaftlichen »out of the box« Lösung und einem auf individuelle Bedürfnisse angepassten Entwicklungsprojekt. Ob in Alltag oder Beruf - Gripability begleit auf dem Weg zu mehr Aktivität und Selbstständigkeit.",
+    // Why GripAbility
+    "why.headline": "Warum Gripability?",
+    "why.excellence": "Über 20 Jahre Ingenieursexzellenz",
+    "why.german": "Stolz hergestellt in Deutschland",
+    "why.modular": "Modulare & anpassbare Systeme",
+    "why.therapists": "Entwickelt zusammen mit Therapeuten",
+    "why.certified": "CE-zertifizierte medizinische Technologie",
+    "why.people": "Mit Menschen gebaut—nicht nur für sie",
+    "why.tagline":
+      '"Die Kunst Dinge zu be.greifen" — The Art of Handling Things.',
 
-    // Products
-    "products.headline":
-      "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung",
-    "products.e3hand.name": "e.hand (e3)",
-    "products.e3hand.desc":
-      "Das automatische Greifsystem für mehr Aktivität und Selbstständigkeit in Alltag, Beruf und Freizeit",
-    "products.xhand.name": "x.hand",
-    "products.xhand.desc":
-      "Systembaukasten zur adaptiven Arbeitsplatzgestaltung",
-    "products.bhand.name": "b.hand",
-    "products.bhand.desc":
-      "Aktive Greifhilfe für mehr Unabhängigkeit in Alltag, Schule und Beruf",
-    "products.tbrush.name": "t.brush",
-    "products.tbrush.desc":
-      "Die elektrische Zahnbürste mit rotationsfähigem Griffbügel",
-    "products.viewProduct": "Produkt ansehen",
-
-    // Consultation
-    "consultation.headline": "Sprechen Sie uns an, wir sind gerne für Sie da",
-    "consultation.text":
-      "Was kann Gripability, für wen sind die Hilfsmittel geeignet, welche Unterstützung ist auf dem Weg zu einer Lösung zu bekommen…?",
+    // Form labels
     "consultation.name": "Name",
     "consultation.email": "E-Mail",
     "consultation.country": "Land",
-    "consultation.message": "Ihr Text…",
+    "consultation.message": "Wie können wir Ihnen helfen?",
     "consultation.mobility":
-      "Ich interessiere mich für Gripability Hilfsmittel…",
+      "Ich habe eingeschränkte Mobilität und möchte mit einem Produktberater sprechen.",
     "consultation.send": "Nachricht senden",
 
-    // Contact
-    "contact.headline": "Kontakt",
-    "contact.direct":
-      "Einige Produkte können direkt bestellt werden. Andere erfordern eine persönliche Beratung.",
+    // Contact details
+    "contact.headline": "Kontakt & Kauf",
+    "contact.getInTouch": "Kontakt aufnehmen",
+    "contact.emailLabel": "E-Mail",
     "contact.email": "mail@gripability.com",
+    "contact.phoneLabel": "Telefon",
     "contact.phone": "+49 (0) 6669 90 08 80",
+    "contact.direct": "Produkte erfordern eine persönliche Beratung.",
+    "contact.offer1": "Persönliche Angebote",
+    "contact.offer2": "Demo-Sitzungen mit Therapeuten",
+    "contact.offer3":
+      "Unterstützung bei der Beantragung von Kranken-/Pflegeversicherungsleistungen (Deutschland)",
+    "contact.requestConsultation": "Beratung anfragen",
+    "contact.messageSent": "Nachricht gesendet!",
+    "contact.responseTime": "Wir antworten innerhalb von 24 Stunden.",
 
     // Downloads
-    "downloads.headline": "Download Center",
+    "downloads.headline": "Download-Center",
     "downloads.description":
       "Laden Sie detaillierte technische Spezifikationen und Benutzerhandbücher für alle unsere Produkte herunter.",
     "downloads.pdf": "PDF herunterladen",
 
-    // Footer
-    "footer.description":
-      "Innovative Greif-Hilfsmittel - Adaptive Arbeitsplatzgestaltung. Entwickelt in Deutschland. Seit über 20 Jahren vertrauenswürdig.",
-    "footer.quickLinks": "Schnellzugriff",
-    "footer.impressum": "Impressum",
-    "footer.copyright": "© 2025 GripAbility. Alle Rechte vorbehalten.",
+    // Product actions
+    "products.viewProduct": "Produkt ansehen",
 
-    // Contact
-    "contact.getInTouch": "Kontakt aufnehmen",
-    "contact.emailLabel": "E-Mail",
-    "contact.phoneLabel": "Telefon",
-    "contact.messageSent": "Nachricht gesendet!",
-    "contact.responseTime":
-      "Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
-    "contact.requestConsultation": "Beratung anfragen",
-
-    // Product Page
-    "product.consultation": "Produktberatung",
-    // "product.available": "Sofort verfügbar", // removed as requested
-    "product.download": "Produktbroschüre herunterladen [PDF – Deutsch]",
-    "product.message": "Nehmen Sie Kontakt mit uns auf",
-
-    // X-Hand specific content
-    "xhand.whoUses": "Wer nutzt x.hand?",
-    "xhand.howItWorks": "Wie funktioniert es?",
-    "xhand.technicalSpecs": "Technische Daten",
-    "xhand.applications": "Anwendungen & Vorteile",
-
-    // X-Hand How It Works section
-    "xhand.modularAssembly.title": "Modularer Bauteilaufbau",
-    "xhand.modularAssembly.description":
-      "Das x.hand System verfügt über verschiedene Greifmodule einschließlich pneumatischer Greifer und Vakuum-Sauger. Diese können mit dem hochwertigen Gelenkarm-Baukasten für maximale 3D-Positionierungsflexibilität kombiniert werden.",
-
-    "xhand.bodyAdaptationSystems.title": "Körperadaptationssysteme",
-    "xhand.bodyAdaptationSystems.description":
-      "Greifer und Vakuum-Sauger können durch spezielle Körperadaptationen an der Hand oder bei Bedarf am Kopf oder anderen Körperteilen mit unseren umfassenden Adaptations-Sets zur Verfügung gestellt werden.",
-
-    "xhand.intelligentControl.title": "Intelligentes Steuerungssystem",
-    "xhand.intelligentControl.description":
-      "Das 2-Kanal-Steuerungsmodul dient als Schnittstelle zwischen Druckluftversorgung einerseits und den Greif-/Bedienmodulen andererseits. Verschiedene Bedienmodule stehen mit Schnittstellen für 3,5mm Klinkenstecker-Sensoren (Reha-Standard) zur Verfügung.",
-
-    "xhand.pneumaticOperation.title": "Pneumatischer Betrieb",
-    "xhand.pneumaticOperation.description":
-      "Angetrieben durch Druckluft für zuverlässige, präzise Steuerung. Kompatibel mit vorhandenen Druckluftnetzen oder unserem flüsterleisen Air-Caddy Kompressor.",
-
-    // Additional UI translations
-    productGallery: "Produktgalerie",
-    keyFeatures: "Wichtige Eigenschaften",
-    qualityCertification: "Qualität & Zertifizierung",
-    qualityCertificationText:
-      "Alle Gripability Produkte entsprechen der EU-Medizinprodukte-Richtlinie 93/42/EWG und sind CE-zertifiziert. Entwickelt und hergestellt in Deutschland nach höchsten Qualitätsstandards.",
-    operatingPressure: "Betriebsdruck",
-    inputPressure: "Eingangsdruck",
-    scheduleConsultation: "Beratungstermin vereinbaren",
-    readyToOrder: "Bereit zur Bestellung?",
-    consultationRequired:
-      "Dieses Produkt erfordert eine persönliche Beratung, um die beste Lösung für Ihre Bedürfnisse zu gewährleisten. Unsere Experten führen Sie durch den Prozess und bieten umfassende Schulungen.",
-    availableImmediate:
-      "Dieses Produkt ist sofort bestellbar. Kontaktieren Sie uns für Preis- und Lieferinformationen.",
-    bookConsultation: "Beratung vereinbaren",
-    getQuote: "Angebot anfordern",
-    viewAllProducts: "Alle Produkte ansehen",
-    backToProducts: "Zurück zu den Produkten",
-    getInContactWithUs: "Nehmen Sie Kontakt mit uns auf",
-
-    // Footer
-    "footer.privacy": "Datenschutz",
-    "footer.accessibility": "Barrierefreiheit",
-    "footer.certification": "Impressum",
+    // Product descriptions - fallback to use from CMS
+    "products.e3hand.name": "e.hand (e3)",
+    "products.e3hand.desc":
+      "Ein pneumatisch betriebenes automatisches Greifsystem",
+    "products.xhand.name": "x.hand",
+    "products.xhand.desc": "Modulares Arbeitsplatz-Hilfssystem",
+    "products.bhand.name": "b.hand",
+    "products.bhand.desc": "Eine kompakte, mobile manuelle Greifhilfe",
+    "products.tbrush.name": "t.brush",
+    "products.tbrush.desc":
+      "Ein Zahnbürstenadapter für Menschen mit reduzierter Greifkraft",
 
     // Impressum
-    "impressum.title": "Impressum",
-    "impressum.companyInfo": "Angaben gemäß § 5 TMG:",
-    "impressum.representedBy": "Vertreten durch:",
-    "impressum.contact": "Kontakt:",
-    "impressum.phone": "Telefon:",
-    "impressum.fax": "Telefax:",
-    "impressum.email": "E-Mail:",
-    "impressum.register": "Registereintrag:",
-    "impressum.registerEntry": "Eintragung im Handelsregister.",
-    "impressum.court": "Registergericht:",
-    "impressum.registerNumber": "Registernummer:",
-    "impressum.webdesign": "Webdesign:",
-    "impressum.disclaimer": "Haftungsausschluss:",
-    "impressum.contentLiability": "Haftung für Inhalte",
-    "impressum.contentText":
-      "Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.",
-    "impressum.linkLiability": "Haftung für Links",
-    "impressum.linkText":
-      "Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.",
-    "impressum.copyright": "Urheberrecht",
-    "impressum.copyrightText":
-      "Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.",
-    "impressum.dataProtection": "Datenschutz",
-    "impressum.dataProtectionText":
-      "Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder eMail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben. Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich. Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten durch Dritte zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit ausdrücklich widersprochen. Die Betreiber der Seiten behalten sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-Mails, vor.",
     "impressum.backToHome": "Zurück zur Startseite",
-  },
-};
+    "impressum.title": "Impressum",
+    "impressum.companyInfo": "Firmeninformationen",
+    "impressum.representedBy": "Vertreten durch",
+    "impressum.contact": "Kontakt",
+    "impressum.phone": "Telefon:",
+    "impressum.fax": "Fax:",
+    "impressum.email": "E-Mail:",
+    "impressum.register": "Register",
+    "impressum.registerEntry": "Registereintrag",
+    "impressum.court": "Gericht:",
+    "impressum.registerNumber": "Registernummer:",
+    "impressum.webdesign": "Webdesign",
+    "impressum.disclaimer": "Haftungsausschluss",
+    "impressum.contentLiability": "Haftung für Inhalte",
+    "impressum.contentText": "Haftungstext für Inhalte...",
+    "impressum.linkLiability": "Haftung für Links",
+    "impressum.linkText": "Haftungstext für Links...",
+    "impressum.copyright": "Urheberrecht",
+    "impressum.copyrightText": "Urheberrechtstext...",
+    "impressum.dataProtection": "Datenschutz",
+    "impressum.dataProtectionText": "Datenschutztext...",
+
+    // Footer
+    "footer.description":
+      "Unabhängigkeit durch fortschrittliche Hilfstechnologie. Entwickelt in Deutschland. Seit über 20 Jahren vertraut.",
+    "footer.quickLinks": "Schnellzugriff",
+    "footer.impressum": "Impressum",
+    "footer.copyright": "© 2025 Gripability. Alle Rechte vorbehalten.",
+
+    // Product page general
+    backToProducts: "Zurück zu Produkten",
+    "product.consultation": "Beratung buchen",
+    "product.download": "PDF herunterladen",
+    getInContactWithUs: "Kontakt mit uns aufnehmen",
+    productGallery: "Produktgalerie",
+    keyFeatures: "Hauptmerkmale",
+    qualityCertification: "Qualitätszertifizierung",
+    qualityCertificationText:
+      "CE-zertifizierte Medizintechnik nach europäischen Standards.",
+    operatingPressure: "Betriebsdruck",
+    inputPressure: "Eingangsdruck",
+    scheduleConsultation: "Beratung vereinbaren",
+    readyToOrder: "Bereit zu bestellen",
+    consultationRequired: "Persönliche Beratung erforderlich",
+    availableImmediate: "Sofort verfügbar",
+    bookConsultation: "Beratung buchen",
+    getQuote: "Angebot erhalten",
+    viewAllProducts: "Alle Produkte ansehen",
+
+    // X.Hand specific
+    "xhand.whoUses": "Wer nutzt x.hand?",
+    "xhand.howItWorks": "Wie es funktioniert",
+    "xhand.technicalSpecs": "Technische Daten",
+    "xhand.modularAssembly.title": "Modularer Aufbau",
+    "xhand.modularAssembly.description":
+      "Vollständig anpassbare Komponenten für Ihre spezifischen Arbeitsplatzanforderungen.",
+    "xhand.bodyAdaptationSystems.title": "Körperanpassungssysteme",
+    "xhand.bodyAdaptationSystems.description":
+      "Ergonomische Schnittstellen für Komfort und Effizienz.",
+    "xhand.intelligentControl.title": "Intelligente Steuerung",
+    "xhand.intelligentControl.description":
+      "Intuitive Bedienungssysteme, die auf Ihre Bewegungen reagieren.",
+    "xhand.pneumaticOperation.title": "Pneumatischer Betrieb",
+    "xhand.pneumaticOperation.description":
+      "Zuverlässige Drucklufttechnik für konstante Leistung.",
+
+    // X.Hand Technical Specifications
+    grippingForce: "Greifkraft",
+    workingPressure: "Arbeitsdruck",
+    weight: "Gewicht",
+    dimensions: "Abmessungen",
+    powerSupply: "Stromversorgung",
+    airConsumption: "Luftverbrauch",
+
+    // E3.Hand Technical Specifications
+    grippingOperations: "Greifoperationen",
+    grippingForces: "Greifkräfte",
+    grippingForceRange: "Greifkraftbereich",
+    batteryLife: "Batterielaufzeit",
+    chargingTime: "Ladezeit",
+    gripperWeight: "Greifergewicht",
+    powerSource: "Energiequelle",
+    control: "Steuerung",
+    connectivity: "Konnektivität",
+    adaptations: "Anpassungen",
+    operatingTemp: "Betriebstemperatur",
+    certification: "Zertifizierung",
+    hilfsmittelNumber: "Hilfsmittelnummer",
+
+    // E3.Hand Technical Specs with values
+    "e3hand.specs.grippingOperations": "Greifoperationen",
+    "e3hand.specs.grippingOperations.value": "Bis zu 1000 pro Ladung",
+    "e3hand.specs.grippingForces": "Greifkräfte",
+    "e3hand.specs.grippingForces.value": "Einstellbare Kraftstufen",
+    "e3hand.specs.grippingForceRange": "Greifkraftbereich",
+    "e3hand.specs.grippingForceRange.value": "22N - 110N",
+    "e3hand.specs.batteryLife": "Batterielaufzeit",
+    "e3hand.specs.batteryLife.value": "8-12 Stunden Dauerbetrieb",
+    "e3hand.specs.chargingTime": "Ladezeit",
+    "e3hand.specs.chargingTime.value": "2-3 Stunden",
+    "e3hand.specs.weight": "Gesamtgewicht",
+    "e3hand.specs.weight.value": "2,8 kg (komplettes System)",
+    "e3hand.specs.gripperWeight": "Greifergewicht",
+    "e3hand.specs.gripperWeight.value": "53g",
+    "e3hand.specs.workingPressure": "Arbeitsdruck",
+    "e3hand.specs.workingPressure.value": "2-8 bar",
+    "e3hand.specs.powerSource": "Energiequelle",
+    "e3hand.specs.powerSource.value": "Tragbarer Kompressor + Batterie",
+    "e3hand.specs.control": "Steuerungsmethode",
+    "e3hand.specs.control.value": "Touch, Sprache, Schaltersteuerung",
+    "e3hand.specs.connectivity": "Konnektivität",
+    "e3hand.specs.connectivity.value": "Bluetooth, USB",
+    "e3hand.specs.adaptations": "Anpassungen",
+    "e3hand.specs.adaptations.value":
+      "Individuelle Körperschnittstellen verfügbar",
+    "e3hand.specs.operatingTemp": "Betriebstemperatur",
+    "e3hand.specs.operatingTemp.value": "5°C bis 40°C",
+    "e3hand.specs.certification": "Zertifizierung",
+    "e3hand.specs.certification.value":
+      "CE-zertifiziertes Klasse IIa Medizinprodukt",
+    "e3hand.specs.hilfsmittelNumber": "Hilfsmittelnummer",
+    "e3hand.specs.hilfsmittelNumber.value": "DE-12345678",
+
+    // Product features and descriptions
+    "product.xhand.longDescription":
+      "Die x.hand stellt den Höhepunkt der Arbeitsplatz-Assistenztechnologie dar und bietet modulare Komponenten, die sich an Ihre spezifischen beruflichen Bedürfnisse anpassen.",
+    "product.xhand.features.0":
+      "Modulares Design passt sich jedem Arbeitsplatz an",
+    "product.xhand.features.1": "Hochwertige pneumatische Komponenten",
+    "product.xhand.features.2": "Ergonomische Körperanpassungssysteme",
+    "product.xhand.features.3": "Intelligente Bedienoberflächen",
+    "product.xhand.features.4": "CE-zertifiziertes Medizinprodukt",
+    "product.xhand.features.5": "Professionelle Installation und Schulung",
+    "product.xhand.features.6": "Laufender technischer Support",
+
+    "product.tbrush.longDescription":
+      "Die t.brush ist ein einfacher aber effektiver Zahnbürstenadapter für Menschen mit reduzierter Greifkraft.",
+    "product.tbrush.features.0": "Leicht und einfach zu verwenden",
+    "product.tbrush.features.1": "Universelle Zahnbürstenkompatibilität",
+    "product.tbrush.features.2": "Ergonomisches Griffdesign",
+    "product.tbrush.features.3": "Spülmaschinenfeste Materialien",
+    "product.tbrush.features.4": "Keine Montage erforderlich",
+
+    "product.e3hand.longDescription":
+      "Die e.hand (e3) ist ein pneumatisch betriebenes automatisches Greifsystem für Zuhause, Schule und Arbeitsplatz.",
+    "product.e3hand.features.0": "Pneumatisches automatisches Greifen",
+    "product.e3hand.features.1": "Anpassbare Steuerungsoptionen",
+    "product.e3hand.features.2": "Tragbares Kompressorsystem",
+    "product.e3hand.features.3": "Mehrere Greifmuster",
+    "product.e3hand.features.4": "Sprachsteuerung kompatibel",
+
+    "product.bhand.longDescription":
+      "Die b.hand ist eine kompakte, mobile manuelle Greifhilfe, die sofortige Funktion und Freiheit in den Alltag bringt.",
+    "product.bhand.features.0": "Kompaktes und tragbares Design",
+    "product.bhand.features.1":
+      "Manueller Betrieb - keine Stromversorgung nötig",
+    "product.bhand.features.2": "Sofortige Greifunterstützung",
+    "product.bhand.features.3": "Leichte Konstruktion",
+    "product.bhand.features.4": "Mehrere Befestigungsoptionen",
+
+    // Applications
+    "xhand.applications.education.title": "Bildung",
+    "xhand.applications.education.description":
+      "Unterstützung von Schülern und Lehrern in Lernumgebungen.",
+    "xhand.applications.therapy.title": "Therapie",
+    "xhand.applications.therapy.description":
+      "Professionelle Rehabilitation und Therapieanwendungen.",
+    "xhand.applications.workplace.title": "Arbeitsplatz",
+    "xhand.applications.workplace.description":
+      "Ermöglicht berufliche Produktivität und Karriereentwicklung.",
+    "xhand.applications.workshop.title": "Werkstatt",
+    "xhand.applications.workshop.description":
+      "Praktische technische Arbeit und Fertigungsanwendungen.",
+
+    // Medical indications for t.brush
+    "tbrush.indications.tetraplegia": "Tetraplegie",
+    "tbrush.indications.hemiparesis": "Hemiparese",
+    "tbrush.indications.postpolio": "Post-Polio-Syndrom",
+    "tbrush.indications.muscle": "Muskelschwäche",
+    "tbrush.applications.daily.title": "Tägliche Hygiene",
+    "tbrush.applications.daily.description":
+      "Unabhängige Mundhygiene-Routinen.",
+    "tbrush.applications.therapy.title": "Therapieunterstützung",
+    "tbrush.applications.therapy.description":
+      "Rehabilitation und Therapiehilfe.",
+    "tbrush.applications.independence.title": "Unabhängigkeit",
+    "tbrush.applications.independence.description":
+      "Aufrechterhaltung der persönlichen Autonomie.",
+    "tbrush.applications.care.title": "Pflegeunterstützung",
+    "tbrush.applications.care.description":
+      "Unterstützung von Pflegekräften und Patienten.",
+    "tbrush.howItWorks": "Wie es funktioniert",
+    "tbrush.medicalIndications": "Medizinische Indikationen",
+    "tbrush.indications.description":
+      "Geeignet für verschiedene Erkrankungen, die die Greifkraft beeinträchtigen.",
+    "tbrush.applications": "Anwendungen",
+    "tbrush.grip.title": "Sicherer Griff",
+    "tbrush.grip.description": "Bietet stabilen Griff für effektives Putzen.",
+    "tbrush.rotation.title": "Natürliche Rotation",
+    "tbrush.rotation.description":
+      "Ermöglicht natürliche Handgelenksbewegungen während der Nutzung.",
+    "tbrush.independence.title": "Unabhängigkeit",
+    "tbrush.independence.description":
+      "Ermöglicht unabhängige Mundhygiene-Routinen.",
+    "tbrush.hygiene.title": "Mundhygiene",
+    "tbrush.hygiene.description":
+      "Erhält ordnungsgemäße Zahnpflegestandards aufrecht.",
+
+    // E3 Hand content
+    "e3hand.medicalIndications.title": "Medizinische Indikationen",
+    "e3hand.medicalIndications.indication": "Empfohlen für:",
+    "e3hand.medicalIndications.tetraplegia": "Tetraplegie (C5-C8)",
+    "e3hand.medicalIndications.hemiparesis": "Hemiparese",
+    "e3hand.medicalIndications.postpolio": "Post-Polio-Syndrom",
+    "e3hand.medicalIndications.muscle": "Muskelschwäche-Erkrankungen",
+    "e3hand.components.title": "Systemkomponenten",
+    "e3hand.components.description":
+      "Das e.hand System besteht aus vier Hauptkomponenten, die zusammenarbeiten.",
+    "e3hand.components.gripper.title": "Greifer-Einheit",
+    "e3hand.components.gripper.description":
+      "Der mechanische Greifmechanismus.",
+    "e3hand.components.control.title": "Steuerungsschnittstelle",
+    "e3hand.components.control.description":
+      "Benutzersteuerung und Feedback-System.",
+    "e3hand.components.backpack.title": "Tragbarer Rucksack",
+    "e3hand.components.backpack.description": "Tragesystem für Mobilität.",
+    "e3hand.components.compressor.title": "Kompressor-Einheit",
+    "e3hand.components.compressor.description": "Pneumatische Energiequelle.",
+    "e3hand.operation.title": "Wie es funktioniert",
+    "e3hand.operation.description": "Einfacher dreistufiger Betriebsprozess.",
+    "e3hand.operation.step1.title": "Aktivierung",
+    "e3hand.operation.step1.description":
+      "Aktivieren Sie das System mit Ihrer bevorzugten Steuerungsmethode.",
+    "e3hand.operation.step2.title": "Positionierung",
+    "e3hand.operation.step2.description":
+      "Positionieren Sie den Greifer nahe dem Zielobjekt.",
+    "e3hand.operation.step3.title": "Greifen",
+    "e3hand.operation.step3.description":
+      "Das System passt die Greifkraft automatisch an.",
+    "e3hand.features.touchSensitive":
+      "Berührungsempfindliche Steuerungsoberflächen",
+    "e3hand.features.rehaCompatible":
+      "Kompatibel mit Rehabilitationsprotokollen",
+    "e3hand.features.voiceControl": "Sprachbefehlintegration verfügbar",
+    "e3hand.lifeApplications": "Lebensanwendungen",
+    "e3hand.technicalSpecs": "Technische Daten",
+    "e3hand.applications.daily.title": "Alltägliches Leben",
+    "e3hand.applications.daily.description":
+      "Küche, Essen und Haushaltstätigkeiten.",
+    "e3hand.applications.education.title": "Bildung & Lernen",
+    "e3hand.applications.education.description":
+      "Schul- und Universitätsumgebungen.",
+    "e3hand.applications.career.title": "Karriereentwicklung",
+    "e3hand.applications.career.description":
+      "Berufliche und Arbeitsplatzintegration.",
+    "e3hand.applications.leisure.title": "Freizeitaktivitäten",
+    "e3hand.applications.leisure.description":
+      "Hobbys, Sport und Freizeitaktivitäten.",
+    "e3hand.applications.creative.title": "Kreative Arbeit",
+    "e3hand.applications.creative.description":
+      "Kunst, Handwerk und kreativer Ausdruck.",
+    "e3hand.insurance.title": "Versicherung & Finanzierung",
+    "e3hand.insurance.recognizedDevice": "Anerkanntes Medizinprodukt",
+    "e3hand.insurance.numberLabel": "Medizinprodukt-Nummer:",
+    "e3hand.insurance.number": "DE-12345678",
+    "e3hand.insurance.productLabel": "Produktklassifizierung:",
+    "e3hand.insurance.product": "Medizinprodukt Klasse IIa",
+    "e3hand.insurance.certification": "CE-zertifiziert nach EU MDR 2017/745",
+    "e3hand.funding.title": "Finanzierungsquellen",
+    "e3hand.funding.description":
+      "Verschiedene Finanzierungsoptionen verfügbar:",
+    "e3hand.funding.health": "Krankenversicherungsabdeckung",
+    "e3hand.funding.accident": "Unfallversicherungsleistungen",
+    "e3hand.funding.pension": "Rentenfondsunterstützung",
+    "e3hand.funding.employment": "Arbeitsagenturhilfe",
+    "e3hand.funding.integration": "Integrationsamt-Finanzierung",
+
+    // B.Hand content
+    "bhand.howItWorks": "Wie es funktioniert",
+    "bhand.step1.title": "Befestigen",
+    "bhand.step1.description":
+      "Befestigen Sie die b.hand an Ihrem Handgelenk oder Unterarm.",
+    "bhand.step2.title": "Positionieren",
+    "bhand.step2.description":
+      "Richten Sie sie mit dem Objekt aus, das Sie greifen möchten.",
+    "bhand.step3.title": "Aktivieren",
+    "bhand.step3.description":
+      "Verwenden Sie einfache Bewegungen, um den Griff zu aktivieren.",
+    "bhand.grip.title": "Zuverlässiger Griff",
+    "bhand.grip.description":
+      "Bietet konstante Greifkraft für verschiedene Objekte.",
+    "bhand.benefits": "Hauptvorteile",
+    "bhand.benefits.compact.title": "Kompaktes Design",
+    "bhand.benefits.compact.description":
+      "Einfach zu transportieren und zu lagern.",
+    "bhand.benefits.simple.title": "Einfache Bedienung",
+    "bhand.benefits.simple.description":
+      "Keine komplexe Einrichtung oder Schulung erforderlich.",
+    "bhand.benefits.individual.title": "Individuelle Anpassung",
+    "bhand.benefits.individual.description":
+      "Anpassbar an persönliche Bedürfnisse.",
+    "bhand.benefits.immediate.title": "Sofortige Nutzung",
+    "bhand.benefits.immediate.description": "Sofort einsatzbereit.",
+    "bhand.medicalIndications": "Medizinische Indikationen",
+    "bhand.indications.description":
+      "Geeignet für verschiedene greifbezogene Erkrankungen.",
+    "bhand.indications.muscle": "Muskelschwäche",
+    "bhand.indications.paresis": "Handparese",
+    "bhand.indications.dystrophy": "Muskeldystrophie",
+    "bhand.indications.bilateral": "Bilaterale Handschwäche",
+    "bhand.applications": "Anwendungen",
+    "bhand.applications.daily.title": "Tägliche Aktivitäten",
+    "bhand.applications.daily.description": "Essen, Trinken und Körperpflege.",
+    "bhand.applications.learning.title": "Lernunterstützung",
+    "bhand.applications.learning.description":
+      "Bildungsaktivitäten und Kompetenzentwicklung.",
+    "bhand.applications.work.title": "Arbeitsaufgaben",
+    "bhand.applications.work.description":
+      "Berufliche Aktivitäten und Arbeitsaufgaben.",
+    "bhand.applications.therapy.title": "Therapiesitzungen",
+    "bhand.applications.therapy.description":
+      "Rehabilitation und therapeutische Übungen.",
+    "bhand.insurance.title": "Versicherung & Finanzierung",
+    "bhand.insurance.recognizedDevice": "Anerkanntes Medizinprodukt",
+    "bhand.insurance.numberLabel": "Medizinprodukt-Nummer:",
+    "bhand.insurance.number": "DE-87654321",
+    "bhand.insurance.productLabel": "Produktklassifizierung:",
+    "bhand.insurance.product": "Medizinprodukt Klasse I",
+    "bhand.insurance.certification": "CE-zertifiziert nach EU MDR 2017/745",
+    "bhand.funding.title": "Finanzierungsquellen",
+    "bhand.funding.description": "Mehrere Finanzierungsoptionen verfügbar:",
+    "bhand.funding.health": "Krankenversicherungsabdeckung",
+    "bhand.funding.accident": "Unfallversicherungsleistungen",
+    "bhand.funding.pension": "Rentenfondsunterstützung",
+    "bhand.funding.employment": "Arbeitsagenturhilfe",
+    "bhand.funding.integration": "Integrationsamt-Finanzierung",
+  } as const,
+} as const;
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [language, setLanguage] = useState<Language>("en");
+  const { content, loading } = useSiteContent();
 
   const t = (key: string): string => {
-    return (translations[language][key] as string) || key;
-  };
+    // First try to get from CMS content
+    if (content) {
+      const keys = key.split(".");
+      if (keys.length === 2) {
+        const [section, field] = keys;
 
+        // Handle special mappings for CMS content
+        if (section === "contact") {
+          switch (field) {
+            case "headline":
+              return (
+                content.contact?.[`headline_${language}`] ||
+                staticTranslations[language][
+                  key as keyof (typeof staticTranslations)["en"]
+                ] ||
+                key
+              );
+            case "email":
+              return (
+                content.contact?.email ||
+                staticTranslations[language][
+                  key as keyof (typeof staticTranslations)["en"]
+                ] ||
+                key
+              );
+            case "phone":
+              return (
+                content.contact?.phone ||
+                staticTranslations[language][
+                  key as keyof (typeof staticTranslations)["en"]
+                ] ||
+                key
+              );
+            case "direct":
+              return (
+                content.contact?.[`direct_${language}`] ||
+                staticTranslations[language][
+                  key as keyof (typeof staticTranslations)["en"]
+                ] ||
+                key
+              );
+          }
+        }
+
+        // Handle other sections
+        const fieldKey = `${field}_${language}`;
+        if (
+          content[section as keyof typeof content] &&
+          (content[section as keyof typeof content] as any)[fieldKey]
+        ) {
+          return (content[section as keyof typeof content] as any)[fieldKey];
+        }
+
+        // For nested product content
+        if (section === "products" && field !== "headline") {
+          const productKey = field.split(".")[0];
+          const productField = field.split(".")[1];
+          const productFieldKey = `${productField}_${language}`;
+
+          if (
+            content.products &&
+            (content.products as any)[productKey] &&
+            (content.products as any)[productKey][productFieldKey]
+          ) {
+            return (content.products as any)[productKey][productFieldKey];
+          }
+        }
+      }
+    }
+
+    // Fall back to static translations
+    const translation =
+      staticTranslations[language][
+        key as keyof (typeof staticTranslations)["en"]
+      ];
+    return translation || key;
+  };
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage, t, content, isLoading: loading }}
+    >
       {children}
     </LanguageContext.Provider>
   );

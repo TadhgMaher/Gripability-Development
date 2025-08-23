@@ -1,0 +1,77 @@
+{
+  "hero": {
+    "headline_en": "The Art of Handling Things.",
+    "headline_de": "Die Kunst Dinge zu be.greifen.",
+    "subheadline_en": "Empowering independence through advanced assistive technology. Engineered in Germany. Trusted for over 20 years.",
+    "subheadline_de": "Selbstständigkeit durch fortschrittliche Hilfstechnologie ermöglichen. Entwickelt in Deutschland. Seit über 20 Jahren vertrauenswürdig.",
+    "background_image": "/herobg.jpg"
+  },
+  "about": {
+    "headline_en": "Where German Engineering Meets Human Empowerment",
+    "headline_de": "Wo deutsche Ingenieurskunst auf menschliche Stärkung trifft",
+    "text1_en": "For over two decades, Gripability has been at the forefront of assistive innovation. Our team of engineers, therapists, and designers work closely with users to create intelligent tools that restore freedom of movement—at home, at work, and beyond.",
+    "text1_de": "Seit über zwei Jahrzehnten ist Gripability Vorreiter in der Hilfsmittelinnovation. Unser Team aus Ingenieuren, Therapeuten und Designern arbeitet eng mit Nutzern zusammen, um intelligente Werkzeuge zu schaffen, die Bewegungsfreiheit wiederherstellen—zu Hause, bei der Arbeit und darüber hinaus.",
+    "text2_en": "Whether you're navigating your daily routine or reshaping your professional life, Gripability's award-winning technology is designed to adapt to you—not the other way around.",
+    "text2_de": "Ob Sie Ihren Alltag meistern oder Ihr Berufsleben neu gestalten—Gripabilitys preisgekrönte Technologie ist darauf ausgelegt, sich an Sie anzupassen—nicht umgekehrt."
+  },
+  "products": {
+    "headline_en": "Smart Tools. Real Independence.",
+    "headline_de": "Intelligente Werkzeuge. Echte Unabhängigkeit.",
+    "xhand": {
+      "name_en": "x.hand",
+      "name_de": "x.hand",
+      "description_en": "Modular workplace assistive system built with high-quality pneumatics and adaptable components.",
+      "description_de": "Modulares Arbeitsplatz-Hilfssystem mit hochwertiger Pneumatik und anpassbaren Komponenten.",
+      "images": [
+        "/XHand.jpg",
+        "/XHand2.jpg",
+        "/XHand3.jpg"
+      ]
+    },
+    "tbrush": {
+      "name_en": "t.brush",
+      "name_de": "t.brush",
+      "description_en": "A toothbrush adapter for people with reduced grip strength. Lightweight. Easy to use.",
+      "description_de": "Ein Zahnbürstenadapter für Menschen mit reduzierter Greifkraft. Leicht. Einfach zu bedienen.",
+      "images": [
+        "/TBrush.jpg"
+      ]
+    },
+    "e3hand": {
+      "name_en": "e.hand (e3)",
+      "name_de": "e.hand (e3)",
+      "description_en": "A pneumatic-powered automatic gripping system for home, school, and work—customizable for hand, head, or alternative use points.",
+      "description_de": "Ein pneumatisch betriebenes automatisches Greifsystem für Zuhause, Schule und Arbeit—anpassbar für Hand-, Kopf- oder alternative Nutzungspunkte.",
+      "images": [
+        "/E3Photo1.jpg",
+        "/E3Photo2.jpg",
+        "/E3Photo3.jpg",
+        "/E3Photo4.jpg"
+      ]
+    },
+    "bhand": {
+      "name_en": "b.hand",
+      "name_de": "b.hand",
+      "description_en": "A compact, mobile manual grip aid that brings immediate function and freedom to everyday life.",
+      "description_de": "Eine kompakte, mobile manuelle Greifhilfe, die sofortige Funktion und Freiheit in den Alltag bringt.",
+      "images": [
+        "/BHand1.jpg",
+        "/BHand2.jpg"
+      ]
+    }
+  },
+  "consultation": {
+    "headline_en": "Let's Talk. We're Here to Help.",
+    "headline_de": "Sprechen wir. Wir sind hier, um zu helfen.",
+    "text_en": "Some of our products require consultation to ensure the best fit for your needs. Use the form below to reach out.",
+    "text_de": "Einige unserer Produkte erfordern eine Beratung, um die beste Lösung für Ihre Bedürfnisse zu gewährleisten. Nutzen Sie das untenstehende Formular, um Kontakt aufzunehmen."
+  },
+  "contact": {
+    "headline_en": "Contact & Purchasing",
+    "headline_de": "Kontakt & Kauf",
+    "email": "mail@gripability.com",
+    "phone": "+49 (0) 6669 90 08 80",
+    "direct_en": "Products require a personal consultation.",
+    "direct_de": "Produkte erfordern eine persönliche Beratung."
+  }
+}
